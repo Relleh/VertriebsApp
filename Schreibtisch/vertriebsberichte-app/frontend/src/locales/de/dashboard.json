@@ -1,0 +1,34 @@
+{
+  "title": "Dashboard",
+  "loading": "Lade Dashboard...",
+  "error": "Fehler beim Laden der Daten:",
+  "statistics": {
+    "totalReports": "Berichte gesamt",
+    "totalCustomers": "Kunden gesamt", 
+    "newCustomers": "Neue Kunden",
+    "totalOrderValue": "Auftragswert gesamt",
+    "totalOfferValue": "Angebotswert gesamt",
+    "lastWeek": "Letzte Woche:",
+    "lastMonth": "Letzter Monat:"
+  },
+  "sections": {
+    "recentReports": "Letzte Berichte",
+    "reportsLastWeek": "Berichte letzte Woche",
+    "reportsLastMonth": "Berichte letzter Monat"
+  },
+  "table": {
+    "customer": "Kunde",
+    "date": "Datum",
+    "location": "Ort",
+    "class": "Klasse",
+    "orderValue": "Auftragswert"
+  },
+  "actions": {
+    "viewAll": "Alle anzeigen →",
+    "createFirst": "Ersten Bericht erstellen"
+  },
+  "empty": {
+    "noReports": "Noch keine Berichte vorhanden.",
+    "createFirstReport": "Ersten Bericht erstellen"
+  }
+}

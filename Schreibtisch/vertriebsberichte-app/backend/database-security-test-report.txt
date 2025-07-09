@@ -1,0 +1,41 @@
+
+=== DATABASE SECURITY TEST REPORT ===
+Test Date: 2025-07-08T09:45:25.323Z
+Total Tests: 26
+Passed: 20
+Failed: 0
+Warnings: 6
+
+SEVERITY BREAKDOWN:
+Critical Issues: 0
+High Issues: 0
+Medium Issues: 5
+Low Issues: 1
+
+DETAILED RESULTS:
+[PASS] Database File Existence: Database file exists and is accessible (info)
+[PASS] Database File Permissions: Database file has secure permissions: 644 (info)
+[PASS] Database File Size: Database file size: 94208 bytes (info)
+[PASS] Foreign Keys Enforcement: Foreign key constraints are enabled (info)
+[WARN] WAL Mode: Database uses delete mode (low)
+[PASS] Synchronous Mode: Database synchronous mode: 2 (info)
+[PASS] Database Integrity: Database integrity check passed (info)
+[PASS] Table Structure: All expected tables exist: regions, users, customers, reports, user_roles, permissions, user_permissions (info)
+[PASS] Foreign Key users.region_id: Foreign key constraint exists (info)
+[PASS] Foreign Key users.role_id: Foreign key constraint exists (info)
+[PASS] Foreign Key reports.user_id: Foreign key constraint exists (info)
+[PASS] Foreign Key reports.customer_id: Foreign key constraint exists (info)
+[PASS] Foreign Key user_permissions.user_id: Foreign key constraint exists (info)
+[PASS] Foreign Key user_permissions.permission_id: Foreign key constraint exists (info)
+[WARN] Unique Constraint users.email: No unique constraint found - needs verification (medium)
+[WARN] Unique Constraint regions.code: No unique constraint found - needs verification (medium)
+[WARN] Unique Constraint customers.kunde_nr: No unique constraint found - needs verification (medium)
+[WARN] Unique Constraint user_roles.name: No unique constraint found - needs verification (medium)
+[WARN] Unique Constraint permissions.name: No unique constraint found - needs verification (medium)
+[PASS] Password Hashing in DB: All passwords are properly hashed in database (info)
+[PASS] Email Format in DB: Email formats are valid in database (info)
+[PASS] Orphaned User Records: No orphaned user records found (info)
+[PASS] Orphaned Report Records: No orphaned report records found (info)
+[PASS] User Role Consistency: All users have assigned roles (info)
+[PASS] Backup Files Check: No exposed backup files found in current directory (info)
+[PASS] Backup Capability: Database backup functionality works (info)

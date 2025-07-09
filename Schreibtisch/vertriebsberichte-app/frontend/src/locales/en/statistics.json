@@ -1,0 +1,31 @@
+{
+  "title": "Regional Statistics",
+  "subtitle": "Analysis by regions and time periods",
+  "dateFilter": {
+    "fromDate": "From Date",
+    "toDate": "To Date",
+    "resetFilters": "Reset Filters"
+  },
+  "loading": "Loading statistics...",
+  "errorLoading": "Error loading statistics:",
+  "breakdown": {
+    "title": "Breakdown by Regions",
+    "headers": {
+      "region": "Region",
+      "aCustomers": "A-Customers",
+      "bCustomers": "B-Customers", 
+      "cCustomers": "C-Customers",
+      "total": "Total",
+      "newCustomers": "New Customers",
+      "orderValue": "Order Value",
+      "offerValue": "Offer Value"
+    },
+    "summary": "Total"
+  },
+  "kpis": {
+    "totalCustomers": "Total Customers",
+    "newCustomers": "New Customers",
+    "totalOrderValue": "Order Value",
+    "totalOfferValue": "Offer Value"
+  }
+}

@@ -1,0 +1,35 @@
+
+=== AUTHENTICATION SECURITY TEST REPORT ===
+Test Date: 2025-07-08T08:31:48.081Z
+Total Tests: 20
+Passed: 17
+Failed: 0
+Warnings: 3
+
+SEVERITY BREAKDOWN:
+Critical Issues: 0
+High Issues: 0
+Medium Issues: 2
+Low Issues: 1
+
+DETAILED RESULTS:
+[PASS] Password Hash Format: Uses bcrypt with 10 rounds (info)
+[PASS] Hash Uniqueness: Each hash is unique (proper salt usage) (info)
+[PASS] Password Verification: Bcrypt comparison works correctly (info)
+[PASS] Wrong Password Rejection: Wrong passwords are properly rejected (info)
+[WARN] JWT Secret Strength: JWT secret is adequate (56 chars). Consider using 64+ chars (medium)
+[PASS] JWT Token Generation: JWT token generated successfully (info)
+[PASS] JWT Token Verification: JWT token verification successful (info)
+[PASS] JWT Token Expiration: Expired tokens are properly rejected (info)
+[PASS] Invalid Token Rejection: Invalid tokens are properly rejected (info)
+[PASS] Wrong Secret Rejection: Tokens with wrong secret are rejected (info)
+[PASS] Register Input Validation: Invalid registration input properly rejected (info)
+[PASS] Login Input Validation: Invalid login input properly rejected (info)
+[PASS] Non-existent User Login: Non-existent user login properly rejected (info)
+[PASS] Health Endpoint: Health endpoint is accessible (info)
+[PASS] Protected Endpoint Without Token: Protected endpoint properly requires authentication (info)
+[PASS] Invalid Token Access: Invalid token properly rejected (info)
+[PASS] Malformed Auth Header: Malformed auth header properly rejected (info)
+[WARN] Token Storage Analysis: Frontend uses localStorage for tokens. Consider httpOnly cookies for better security. (medium)
+[PASS] Token Lifetime: Token lifetime is 7 days as configured (info)
+[WARN] Session Concurrency: No mechanism to limit concurrent sessions. Consider implementing if needed. (low)

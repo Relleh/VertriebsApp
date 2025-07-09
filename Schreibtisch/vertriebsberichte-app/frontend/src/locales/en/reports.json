@@ -1,0 +1,162 @@
+{
+  "title": {
+    "new": "New Visit Report",
+    "edit": "Edit Visit Report",
+    "list": "Visit Reports",
+    "details": "Report Details"
+  },
+  "fields": {
+    "customerNumber": "Customer Number",
+    "customerName": "Customer Name",
+    "contactPerson": "Contact Person",
+    "location": "Location",
+    "date": "Date",
+    "shortReport": "Short Report",
+    "todos": "Todos",
+    "classification": "Classification",
+    "orderValue": "Order Value (EUR)",
+    "offerValue": "Offer Value (EUR)",
+    "nextVisit": "Next Visit in (Weeks)",
+    "newCustomer": "New Customer",
+    "overnight": "Overnight Stay",
+    "status": "Status",
+    "createdBy": "Created by"
+  },
+  "validation": {
+    "customerNumberRequired": "Customer number is required",
+    "customerNameRequired": "Customer name is required",
+    "contactPersonRequired": "Contact person is required",
+    "locationRequired": "Location is required",
+    "invalidDateFormat": "Invalid date format",
+    "shortReportMinLength": "Short report must be at least 10 characters long",
+    "invalidClassification": "Classification must be A, B or C"
+  },
+  "messages": {
+    "saveSuccess": "Report saved successfully",
+    "saveError": "Error saving report",
+    "deleteSuccess": "Report deleted successfully",
+    "deleteError": "Error deleting report",
+    "loadError": "Error loading reports",
+    "loadReportError": "Error loading report"
+  },
+  "filters": {
+    "title": "🔍 Advanced Filters",
+    "activeLabel": "Filters Active",
+    "reset": "Reset",
+    "resetAll": "Reset All Filters",
+    "close": "Close Filters",
+    "activeMessage": "Filters are active - results are automatically filtered",
+    "search": {
+      "label": "🔎 Quick Search",
+      "placeholder": "Search in reports, todos, customer names, contacts..."
+    },
+    "dates": {
+      "fromDate": "📅 From Date",
+      "toDate": "📅 To Date"
+    },
+    "customer": {
+      "number": "🏷️ Customer Number",
+      "numberPlaceholder": "e.g. K12345",
+      "name": "🏢 Customer Name", 
+      "namePlaceholder": "e.g. Example Corp"
+    },
+    "employee": {
+      "name": "👤 Employee Name",
+      "placeholder": "e.g. John Doe"
+    },
+    "location": {
+      "label": "📍 Location",
+      "placeholder": "e.g. Munich"
+    },
+    "classification": {
+      "label": "⭐ Classification",
+      "all": "All Classes",
+      "premium": "A - Premium",
+      "standard": "B - Standard", 
+      "basic": "C - Basic"
+    },
+    "status": {
+      "label": "📋 Status"
+    },
+    "newCustomer": {
+      "label": "🆕 New Customer",
+      "all": "All Customers",
+      "onlyNew": "New Customers Only", 
+      "onlyExisting": "Existing Customers Only"
+    },
+    "orderValue": {
+      "min": "💰 Min. Order Value (€)",
+      "max": "💰 Max. Order Value (€)",
+      "minPlaceholder": "e.g. 1000",
+      "maxPlaceholder": "e.g. 50000"
+    },
+    "sorting": {
+      "sortBy": "🔄 Sort by",
+      "sortOrder": "↕️ Sort Order",
+      "fields": {
+        "date": "Date",
+        "customerName": "Customer Name", 
+        "employeeName": "Employee Name",
+        "location": "Location",
+        "classification": "Classification",
+        "orderValue": "Order Value",
+        "offerValue": "Offer Value",
+        "status": "Status",
+        "createdAt": "Created Date"
+      },
+      "directions": {
+        "desc": "Descending (Z-A, 9-1)",
+        "asc": "Ascending (A-Z, 1-9)"
+      }
+    }
+  },
+  "sorting": {
+    "date": "Date",
+    "customerName": "Customer Name",
+    "orderValue": "Order Value",
+    "classification": "Classification",
+    "nextVisit": "Next Visit"
+  },
+  "list": {
+    "title": "📋 Visit Reports",
+    "loading": "Loading reports...",
+    "found": "reports found",
+    "newReport": "➕ New Report",
+    "employee": "🧑‍💼 Employee:",
+    "shortReportLabel": "Short report:",
+    "edit": "✏️ Edit",
+    "delete": "🗑️ Delete",
+    "orderLabel": "💰 Order:",
+    "offerLabel": "📊 Offer:",
+    "newCustomerBadge": "🆕 New Customer",
+    "deleteConfirm": "Do you really want to delete this report?",
+    "deleteError": "Error deleting report"
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next",
+    "showing": "Showing",
+    "to": "to",
+    "of": "of",
+    "reports": "reports"
+  },
+  "empty": {
+    "noReportsFound": "No reports found",
+    "noReportsYet": "No reports available yet",
+    "adjustFilters": "Try adjusting your filters or resetting them.",
+    "createFirst": "Create your first visit report.",
+    "createFirstButton": "➕ Create First Report"
+  },
+  "edit": {
+    "classification": {
+      "A": "A - Very Important",
+      "B": "B - Important", 
+      "C": "C - Less Important"
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving..."
+    }
+  }
+}

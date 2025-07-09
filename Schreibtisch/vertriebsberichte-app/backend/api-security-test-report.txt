@@ -1,0 +1,40 @@
+
+=== API SECURITY TEST REPORT ===
+Test Date: 2025-07-08T09:47:13.174Z
+Total Tests: 25
+Passed: 2
+Failed: 4
+Warnings: 19
+
+SEVERITY BREAKDOWN:
+Critical Issues: 0
+High Issues: 0
+Medium Issues: 6
+Low Issues: 17
+
+DETAILED RESULTS:
+[WARN] CORS Allow Origin: CORS allows all origins (*) - consider restricting for production (medium)
+[WARN] CORS Preflight: CORS preflight handling needs verification (low)
+[FAIL] Content Security Policy: Missing Content-Security-Policy header (medium)
+[FAIL] X-Frame-Options: Missing X-Frame-Options header (medium)
+[FAIL] X-Content-Type-Options: Missing X-Content-Type-Options header (medium)
+[WARN] HSTS Header: Missing Strict-Transport-Security header (expected for HTTPS) (low)
+[WARN] X-XSS-Protection: Missing X-XSS-Protection header (low)
+[FAIL] Referrer Policy: Missing Referrer-Policy header (medium)
+[PASS] Server Header Disclosure: Server header not disclosed (info)
+[WARN] X-Powered-By Disclosure: X-Powered-By header reveals: Express (low)
+[WARN] Rate Limiting: No rate limiting detected - may allow DoS attacks (medium)
+[WARN] Rate Limit Headers: No rate limit headers found (low)
+[PASS] 404 Error Information: 404 errors do not reveal sensitive information (info)
+[WARN] Invalid JSON Handling: JSON handling test inconclusive (low)
+[WARN] Database Error Handling: Database error test inconclusive (low)
+[WARN] HTTP GET Method: GET method test inconclusive (low)
+[WARN] HTTP POST Method: POST method test inconclusive (low)
+[WARN] HTTP PUT Method: PUT method test inconclusive (low)
+[WARN] HTTP DELETE Method: DELETE method test inconclusive (low)
+[WARN] HTTP PATCH Method: PATCH method test inconclusive (low)
+[WARN] HTTP HEAD Method: HEAD method test inconclusive (low)
+[WARN] HTTP OPTIONS Method: OPTIONS method test inconclusive (low)
+[WARN] HTTP TRACE Method: TRACE method test inconclusive (low)
+[WARN] Content Type Enforcement: Content type test inconclusive (low)
+[WARN] Large Payload Handling: Large payload test inconclusive (low)

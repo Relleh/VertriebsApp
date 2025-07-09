@@ -1,0 +1,28 @@
+
+=== AUTHORIZATION SECURITY TEST REPORT v2 ===
+Test Date: 2025-07-08T10:17:27.578Z
+Using Real Database Users: admin, admin2, employee
+Total Tests: 12
+Passed: 11
+Failed: 0
+Warnings: 1
+
+SEVERITY BREAKDOWN:
+Critical Issues: 0
+High Issues: 0
+Medium Issues: 0
+Low Issues: 1
+
+DETAILED RESULTS:
+[PASS] Real Admin Access to Admin Endpoint: Admin user can access admin endpoints (info)
+[PASS] Second Admin Access: Second admin user can access admin endpoints (info)
+[PASS] Real Employee Access to Admin Endpoint: Employee properly denied access to admin endpoints (info)
+[WARN] Real Employee Access to Analytics: Analytics endpoint not found (low)
+[PASS] Admin Permission Verification: Admin has all expected permissions (8 total) (info)
+[PASS] Employee Permission Verification: Employee has correct limited permissions: view_analytics (info)
+[PASS] Admin Profile Access: Admin can access their own profile (info)
+[PASS] Employee Profile Access: Employee can access their own profile (info)
+[PASS] Admin User List Access: Admin can access user list (18 users) (info)
+[PASS] Admin Roles Access: Admin can access roles (3 roles) (info)
+[PASS] Admin Permissions Access: Admin can access permissions (8 permissions) (info)
+[PASS] Employee Admin Access Block: Employee properly blocked from admin functions (info)

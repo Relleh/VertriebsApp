@@ -1,0 +1,20 @@
+{
+  "absenceReason": {
+    "label": "Abwesenheitsgrund",
+    "none": "Kein Status",
+    "B": "B - Bürotag",
+    "U": "U - Urlaub", 
+    "K": "K - Krank",
+    "note": "Nur bei Abwesenheit ausfüllen"
+  },
+  "processStatus": {
+    "label": "Bearbeitungsstatus",
+    "all": "Alle Status",
+    "B": "B - Bearbeitung",
+    "U": "U - Umsetzung",
+    "K": "K - Komplett",
+    "O": "O - Offen",
+    "V": "V - Verschoben",
+    "I": "I - Info"
+  }
+}

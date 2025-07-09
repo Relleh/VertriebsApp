@@ -1,0 +1,5 @@
+
+> vertriebsberichte-backend@1.0.0 dev
+> tsx watch src/index.ts
+
+Server läuft auf Port 3000

@@ -1,0 +1,31 @@
+{
+  "title": "Regionale Statistiken",
+  "subtitle": "Auswertungen nach Regionen und Zeiträumen",
+  "dateFilter": {
+    "fromDate": "Von Datum",
+    "toDate": "Bis Datum",
+    "resetFilters": "Filter zurücksetzen"
+  },
+  "loading": "Lade Statistiken...",
+  "errorLoading": "Fehler beim Laden der Statistiken:",
+  "breakdown": {
+    "title": "Aufschlüsselung nach Regionen",
+    "headers": {
+      "region": "Region",
+      "aCustomers": "A-Kunden",
+      "bCustomers": "B-Kunden", 
+      "cCustomers": "C-Kunden",
+      "total": "Gesamt",
+      "newCustomers": "Neue Kunden",
+      "orderValue": "Auftragswert",
+      "offerValue": "Angebotswert"
+    },
+    "summary": "Summe"
+  },
+  "kpis": {
+    "totalCustomers": "Kunden gesamt",
+    "newCustomers": "Neue Kunden",
+    "totalOrderValue": "Auftragswert",
+    "totalOfferValue": "Angebotswert"
+  }
+}

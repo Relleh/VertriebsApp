@@ -1,0 +1,41 @@
+{
+  "title": "👑 Admin Dashboard",
+  "welcome": "Welcome, {{name}}! Manage users and roles.",
+  "accessDenied": {
+    "title": "Access Denied",
+    "message": "You don't have permission to access this area."
+  },
+  "statistics": {
+    "totalUsers": "Total Users",
+    "administrators": "Administrators",
+    "managers": "Managers", 
+    "employees": "Employees"
+  },
+  "userManagement": {
+    "title": "👥 All Users",
+    "table": {
+      "user": "User",
+      "role": "Role",
+      "actions": "Actions",
+      "edit": "Edit"
+    },
+    "roleInfo": {
+      "current": "Current:",
+      "hasRole": "has role",
+      "noRole": "No Role"
+    }
+  },
+  "roleAssignment": {
+    "title": "🔧 Assign Role",
+    "selectUser": "Select User",
+    "selectRole": "New Role",
+    "userPlaceholder": "-- Select User --",
+    "rolePlaceholder": "-- Select Role --",
+    "assignButton": "Assign Role",
+    "success": "Role assigned successfully!",
+    "error": "Error assigning role"
+  },
+  "messages": {
+    "errorLoading": "Error loading data"
+  }
+}

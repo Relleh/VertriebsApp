@@ -1,0 +1,140 @@
+
+> vertriebsberichte-frontend@1.0.0 dev
+> vite
+
+
+  VITE v5.4.19  ready in 1078 ms
+
+  ➜  Local:   http://localhost:5000/
+  ➜  Network: use --host to expose
+16:44:16 [vite] hmr update /src/components/Layout.tsx, /src/index.css
+16:45:36 [vite] hmr update /src/App.tsx, /src/index.css
+16:45:44 [vite] hmr update /src/App.tsx, /src/index.css
+16:46:01 [vite] hmr update /src/components/RoleProtectedRoute.tsx, /src/index.css
+16:46:01 [vite] hmr invalidate /src/components/RoleProtectedRoute.tsx Could not Fast Refresh (new export)
+16:46:01 [vite] hmr update /src/App.tsx, /src/index.css
+16:47:38 [vite] hmr update /src/components/Layout.tsx, /src/index.css
+16:47:52 [vite] hmr update /src/components/Layout.tsx, /src/index.css
+16:48:03 [vite] hmr update /src/components/Layout.tsx, /src/index.css
+16:48:09 [vite] hmr update /src/components/Layout.tsx, /src/index.css
+16:48:16 [vite] hmr update /src/components/Layout.tsx, /src/index.css
+13:15:30 [vite] page reload src/main.tsx
+13:15:38 [vite] ✨ new dependencies optimized: i18next, react-i18next, i18next-browser-languagedetector
+13:15:38 [vite] ✨ optimized dependencies changed. reloading
+13:17:21 [vite] hmr update /src/components/Layout.tsx, /src/index.css
+13:19:57 [vite] hmr update /src/pages/NewReport.tsx, /src/index.css
+13:21:21 [vite] hmr update /src/pages/EditReport.tsx, /src/index.css
+13:22:58 [vite] hmr update /src/components/AdvancedFilters.tsx, /src/index.css
+13:38:15 [vite] page reload src/locales/de/auth.json
+13:38:27 [vite] page reload src/locales/en/auth.json
+13:38:47 [vite] hmr update /src/pages/Login.tsx, /src/index.css
+13:39:27 [vite] hmr update /src/pages/Login.tsx, /src/index.css
+13:39:52 [vite] hmr update /src/pages/Login.tsx, /src/index.css
+13:40:07 [vite] hmr update /src/pages/Login.tsx, /src/index.css
+13:41:02 [vite] page reload src/i18n/config.ts
+13:41:19 [vite] hmr update /src/pages/Dashboard.tsx, /src/index.css
+13:41:39 [vite] hmr update /src/pages/Dashboard.tsx, /src/index.css
+13:42:01 [vite] hmr update /src/pages/Dashboard.tsx, /src/index.css
+13:42:22 [vite] hmr update /src/pages/Dashboard.tsx, /src/index.css
+13:44:11 [vite] hmr update /src/pages/Dashboard.tsx, /src/index.css
+13:45:43 [vite] page reload src/locales/en/reports.json
+13:45:55 [vite] page reload src/locales/de/reports.json
+13:46:19 [vite] hmr update /src/pages/Reports.tsx, /src/index.css
+13:47:03 [vite] hmr update /src/pages/Reports.tsx, /src/index.css
+13:47:21 [vite] hmr update /src/pages/Reports.tsx, /src/index.css
+13:47:35 [vite] hmr update /src/pages/Reports.tsx, /src/index.css
+13:48:25 [vite] page reload src/locales/en/common.json
+13:48:44 [vite] page reload src/locales/de/common.json
+13:49:04 [vite] hmr update /src/pages/Analytics.tsx, /src/index.css
+13:49:18 [vite] hmr update /src/pages/Analytics.tsx, /src/index.css
+13:49:35 [vite] hmr update /src/pages/Analytics.tsx, /src/index.css
+14:08:36 [vite] page reload src/i18n/config.ts
+14:08:44 [vite] page reload src/i18n/config.ts
+14:08:51 [vite] page reload src/i18n/config.ts
+14:09:37 [vite] page reload src/locales/de/reports.json
+14:09:48 [vite] page reload src/locales/de/reports.json
+14:10:02 [vite] page reload src/locales/en/reports.json
+14:10:12 [vite] page reload src/locales/en/reports.json
+14:10:32 [vite] hmr update /src/pages/EditReport.tsx, /src/index.css
+14:10:43 [vite] hmr update /src/pages/EditReport.tsx, /src/index.css
+14:10:50 [vite] hmr update /src/pages/EditReport.tsx, /src/index.css
+14:10:56 [vite] hmr update /src/pages/EditReport.tsx, /src/index.css
+14:11:04 [vite] hmr update /src/pages/EditReport.tsx, /src/index.css
+14:11:16 [vite] hmr update /src/pages/EditReport.tsx, /src/index.css
+14:11:26 [vite] hmr update /src/pages/EditReport.tsx, /src/index.css
+14:11:37 [vite] hmr update /src/pages/EditReport.tsx, /src/index.css
+14:11:45 [vite] hmr update /src/pages/EditReport.tsx, /src/index.css
+14:11:57 [vite] hmr update /src/pages/EditReport.tsx, /src/index.css
+14:12:42 [vite] hmr update /src/pages/NewReport.tsx, /src/index.css
+14:12:49 [vite] hmr update /src/pages/NewReport.tsx, /src/index.css
+14:13:44 [vite] page reload src/locales/de/reports.json
+14:14:01 [vite] page reload src/locales/en/reports.json
+14:14:13 [vite] hmr update /src/components/AdvancedFilters.tsx, /src/index.css
+14:14:24 [vite] hmr update /src/components/AdvancedFilters.tsx, /src/index.css
+14:14:35 [vite] hmr update /src/components/AdvancedFilters.tsx, /src/index.css
+14:14:47 [vite] hmr update /src/components/AdvancedFilters.tsx, /src/index.css
+14:14:59 [vite] hmr update /src/components/AdvancedFilters.tsx, /src/index.css
+14:15:09 [vite] hmr update /src/components/AdvancedFilters.tsx, /src/index.css
+14:15:19 [vite] hmr update /src/components/AdvancedFilters.tsx, /src/index.css
+14:15:32 [vite] hmr update /src/components/AdvancedFilters.tsx, /src/index.css
+14:16:17 [vite] hmr update /src/pages/AdminDashboard.tsx, /src/index.css
+14:16:25 [vite] hmr update /src/pages/AdminDashboard.tsx, /src/index.css
+14:16:33 [vite] hmr update /src/pages/AdminDashboard.tsx, /src/index.css
+14:16:45 [vite] hmr update /src/pages/AdminDashboard.tsx, /src/index.css
+14:16:55 [vite] hmr update /src/pages/AdminDashboard.tsx, /src/index.css
+14:17:05 [vite] hmr update /src/pages/AdminDashboard.tsx, /src/index.css
+14:17:16 [vite] hmr update /src/pages/AdminDashboard.tsx, /src/index.css
+14:17:28 [vite] hmr update /src/pages/AdminDashboard.tsx, /src/index.css
+14:18:24 [vite] hmr update /src/pages/GlobalStatistics.tsx, /src/index.css
+14:18:32 [vite] hmr update /src/pages/GlobalStatistics.tsx, /src/index.css
+14:18:45 [vite] hmr update /src/pages/GlobalStatistics.tsx, /src/index.css
+14:18:57 [vite] hmr update /src/pages/GlobalStatistics.tsx, /src/index.css
+14:19:09 [vite] hmr update /src/pages/GlobalStatistics.tsx, /src/index.css
+14:19:27 [vite] hmr update /src/pages/GlobalStatistics.tsx, /src/index.css
+14:19:39 [vite] hmr update /src/pages/GlobalStatistics.tsx, /src/index.css
+14:20:05 [vite] hmr update /src/pages/GlobalStatistics.tsx, /src/index.css
+14:20:33 [vite] hmr update /src/pages/GlobalStatistics.tsx, /src/index.css
+14:20:43 [vite] hmr update /src/pages/GlobalStatistics.tsx, /src/index.css
+14:20:56 [vite] hmr update /src/pages/GlobalStatistics.tsx, /src/index.css
+14:21:39 [vite] hmr update /src/pages/Statistics.tsx, /src/index.css
+14:21:47 [vite] hmr update /src/pages/Statistics.tsx, /src/index.css
+14:21:55 [vite] hmr update /src/pages/Statistics.tsx, /src/index.css
+14:22:05 [vite] hmr update /src/pages/Statistics.tsx, /src/index.css
+14:22:16 [vite] hmr update /src/pages/Statistics.tsx, /src/index.css
+14:22:27 [vite] hmr update /src/pages/Statistics.tsx, /src/index.css
+14:22:44 [vite] hmr update /src/pages/Statistics.tsx, /src/index.css
+14:22:52 [vite] hmr update /src/pages/Statistics.tsx, /src/index.css
+14:25:38 [vite] hmr update /src/components/PrivateRoute.tsx, /src/index.css
+14:25:48 [vite] hmr update /src/components/PrivateRoute.tsx, /src/index.css
+15:08:05 [vite] page reload src/locales/de/common.json
+15:08:41 [vite] page reload src/locales/en/common.json
+15:09:34 [vite] hmr update /src/components/Layout.tsx, /src/index.css
+15:10:51 [vite] page reload src/locales/de/reports.json
+15:11:56 [vite] page reload src/locales/en/reports.json
+15:12:49 [vite] hmr update /src/pages/Reports.tsx, /src/index.css
+15:12:56 [vite] hmr update /src/pages/Reports.tsx, /src/index.css
+15:13:03 [vite] hmr update /src/pages/Reports.tsx, /src/index.css
+15:13:11 [vite] hmr update /src/pages/Reports.tsx, /src/index.css
+15:15:55 [vite] hmr update /src/pages/Reports.tsx, /src/index.css
+16:43:27 [vite] http proxy error: /api/auth/register
+Error: connect ECONNREFUSED 127.0.0.1:3000
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+16:58:57 [vite] hmr update /src/components/LanguageSwitcher.tsx, /src/index.css
+16:59:43 [vite] http proxy error: /api/auth/login
+Error: connect ECONNREFUSED 127.0.0.1:3000
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+16:59:44 [vite] http proxy error: /api/auth/login
+Error: connect ECONNREFUSED 127.0.0.1:3000
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+16:59:44 [vite] http proxy error: /api/auth/login
+Error: connect ECONNREFUSED 127.0.0.1:3000
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+16:59:48 [vite] page reload src/locales/de/common.json
+16:59:55 [vite] page reload src/locales/en/common.json
+17:00:03 [vite] http proxy error: /api/auth/login
+Error: connect ECONNREFUSED 127.0.0.1:3000
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16)
+17:00:13 [vite] hmr update /src/components/Layout.tsx, /src/index.css
+17:00:37 [vite] hmr update /src/components/Layout.tsx, /src/index.css
+17:00:44 [vite] hmr update /src/components/Layout.tsx, /src/index.css
+17:00:52 [vite] hmr update /src/components/Layout.tsx, /src/index.css

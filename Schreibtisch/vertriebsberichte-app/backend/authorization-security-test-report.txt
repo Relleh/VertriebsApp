@@ -1,0 +1,37 @@
+
+=== AUTHORIZATION SECURITY TEST REPORT ===
+Test Date: 2025-07-08T08:34:18.676Z
+Total Tests: 22
+Passed: 12
+Failed: 2
+Warnings: 8
+
+SEVERITY BREAKDOWN:
+Critical Issues: 0
+High Issues: 1
+Medium Issues: 6
+Low Issues: 3
+
+DETAILED RESULTS:
+[FAIL] Admin Access to Admin Endpoint: Admin access denied to admin endpoints (high)
+[PASS] Manager Access to Admin Endpoint: Manager properly denied access to admin endpoints (info)
+[PASS] Employee Access to Admin Endpoint: Employee properly denied access to admin endpoints (info)
+[WARN] Employee Access to Analytics: Analytics endpoint test inconclusive: Request failed with status code 404 (medium)
+[WARN] No Role Token Access: No role test inconclusive: Request failed with status code 500 (medium)
+[WARN] Invalid Role Token Access: Invalid role test inconclusive: Request failed with status code 500 (medium)
+[PASS] Permission Escalation Attempt: Permission escalation properly prevented (info)
+[PASS] Token Payload Tampering: Tampered token properly rejected (info)
+[PASS] Wrong Signature Token: Token with wrong signature properly rejected (info)
+[WARN] Direct Object Reference: Direct object reference test inconclusive: Request failed with status code 404 (medium)
+[WARN] HTTP Method Manipulation: HTTP method test inconclusive: Request failed with status code 404 (medium)
+[WARN] Parameter Pollution: Parameter pollution should be tested manually (low)
+[WARN] /api/auth/login - No Auth: Endpoint test inconclusive: Request failed with status code 400 (low)
+[WARN] /api/auth/register - No Auth: Endpoint test inconclusive: Request failed with status code 400 (low)
+[PASS] /api/health - No Auth: Public endpoint accessible without auth (info)
+[PASS] /api/reports - Requires Auth: Protected endpoint properly requires auth (info)
+[PASS] /api/users/profile - Requires Auth: Protected endpoint properly requires auth (info)
+[PASS] /api/admin/users - Requires Auth: Protected endpoint properly requires auth (info)
+[FAIL] /api/admin/users - admin Access: admin denied access to /api/admin/users (medium)
+[PASS] /api/admin/users - manager Access: manager properly denied access to /api/admin/users (info)
+[PASS] /api/admin/users - employee Access: employee properly denied access to /api/admin/users (info)
+[PASS] /api/analytics - Requires Auth: Protected endpoint properly requires auth (info)

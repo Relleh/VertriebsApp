@@ -1,0 +1,48 @@
+{
+  "title": "🌍 Globale Auswertungen",
+  "subtitle": "Übersicht aller Berichte, Mitarbeiter und Kunden",
+  "accessDenied": {
+    "title": "Zugriff verweigert",
+    "message": "Sie haben keine Berechtigung für diese globalen Auswertungen."
+  },
+  "dateFilter": {
+    "title": "📅 Zeitraum filtern",
+    "fromDate": "Von Datum",
+    "toDate": "Bis Datum",
+    "resetFilters": "Filter zurücksetzen",
+    "refresh": "Aktualisieren"
+  },
+  "loading": "Lade globale Statistiken...",
+  "errorLoading": "Fehler beim Laden der globalen Statistiken",
+  "kpis": {
+    "totalReports": "Gesamt Berichte",
+    "totalCustomers": "Gesamt Kunden", 
+    "totalOrderValue": "Gesamt Auftragswert",
+    "newCustomers": "Neue Kunden",
+    "aCustomers": "A-Kunden",
+    "bCustomers": "B-Kunden",
+    "cCustomers": "C-Kunden"
+  },
+  "employeePerformance": {
+    "title": "🏆 Mitarbeiter-Performance",
+    "headers": {
+      "employee": "Mitarbeiter",
+      "region": "Region",
+      "reports": "Berichte",
+      "customers": "Kunden",
+      "orderValue": "Auftragswert",
+      "avgOrderValue": "Ø Auftragswert"
+    }
+  },
+  "topCustomers": {
+    "title": "⭐ Top 20 Kunden",
+    "headers": {
+      "customer": "Kunde",
+      "class": "Klasse",
+      "orderValue": "Auftragswert",
+      "lastVisit": "Letzter Besuch"
+    },
+    "newCustomer": "neu",
+    "neverVisited": "Nie"
+  }
+}

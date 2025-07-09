@@ -1,0 +1,41 @@
+{
+  "title": "👑 Admin Dashboard",
+  "welcome": "Willkommen, {{name}}! Verwalten Sie Benutzer und Rollen.",
+  "accessDenied": {
+    "title": "Zugriff verweigert",
+    "message": "Sie haben keine Berechtigung für diesen Bereich."
+  },
+  "statistics": {
+    "totalUsers": "Gesamt Benutzer",
+    "administrators": "Administratoren",
+    "managers": "Manager", 
+    "employees": "Mitarbeiter"
+  },
+  "userManagement": {
+    "title": "👥 Alle Benutzer",
+    "table": {
+      "user": "Benutzer",
+      "role": "Rolle",
+      "actions": "Aktionen",
+      "edit": "Bearbeiten"
+    },
+    "roleInfo": {
+      "current": "Aktuell:",
+      "hasRole": "hat die Rolle",
+      "noRole": "Keine Rolle"
+    }
+  },
+  "roleAssignment": {
+    "title": "🔧 Rolle zuweisen",
+    "selectUser": "Benutzer auswählen",
+    "selectRole": "Neue Rolle",
+    "userPlaceholder": "-- Benutzer wählen --",
+    "rolePlaceholder": "-- Rolle wählen --",
+    "assignButton": "Rolle zuweisen",
+    "success": "Rolle erfolgreich zugewiesen!",
+    "error": "Fehler beim Zuweisen der Rolle"
+  },
+  "messages": {
+    "errorLoading": "Fehler beim Laden der Daten"
+  }
+}

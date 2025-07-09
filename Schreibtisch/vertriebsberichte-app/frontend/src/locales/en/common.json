@@ -1,0 +1,81 @@
+{
+  "appName": "Sales Reports",
+  "navigation": {
+    "dashboard": "Dashboard",
+    "reports": "Reports",
+    "analytics": "Analytics",
+    "personalAnalytics": "🔍 Analytics",
+    "globalStatistics": "Global Statistics",
+    "adminDashboard": "User Management",
+    "logout": "Logout"
+  },
+  "buttons": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "new": "New",
+    "back": "Back",
+    "search": "Search",
+    "filter": "Filter",
+    "reset": "Reset",
+    "export": "Export",
+    "loading": "Loading..."
+  },
+  "messages": {
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Information",
+    "confirmDelete": "Are you sure you want to delete this entry?",
+    "noData": "No data available",
+    "loading": "Loading data..."
+  },
+  "language": {
+    "de": "Deutsch",
+    "en": "English",
+    "selectLanguage": "Select Language"
+  },
+  "classification": {
+    "A": "A - Premium",
+    "B": "B - Standard", 
+    "C": "C - Basic"
+  },
+  "customerType": {
+    "all": "All Customers",
+    "new": "New Customers Only",
+    "existing": "Existing Customers Only"
+  },
+  "analytics": {
+    "title": "🔍 Analytics Dashboard",
+    "subtitle": "Personal performance analysis for",
+    "loading": "Loading analytics data...",
+    "noData": "No analytics data available",
+    "errorLoading": "Error loading analytics data:",
+    "timeRange": {
+      "label": "Time Period:",
+      "last7Days": "Last 7 days",
+      "last30Days": "Last 30 days",
+      "last90Days": "Last 90 days",
+      "lastYear": "Last year"
+    },
+    "kpi": {
+      "totalReports": "Total Reports",
+      "totalRevenue": "Total Revenue",
+      "avgOrderValue": "Avg. Order Value",
+      "newCustomers": "New Customers"
+    },
+    "charts": {
+      "monthlyTrends": "📈 Monthly Trends",
+      "statusDistribution": "📋 Status Distribution",
+      "recentActivity": "⚡ Recent Activity",
+      "reports": "reports"
+    },
+    "insights": {
+      "title": "💡 Performance Insights",
+      "avgPerReport": "Average per report",
+      "completionRate": "Completion rate",
+      "newCustomerRate": "New customer rate"
+    }
+  }
+}

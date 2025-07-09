@@ -1,0 +1,37 @@
+
+=== INPUT VALIDATION SECURITY TEST REPORT ===
+Test Date: 2025-07-08T10:57:30.883Z
+Total Tests: 22
+Passed: 15
+Failed: 0
+Warnings: 7
+
+SEVERITY BREAKDOWN:
+Critical Issues: 0
+High Issues: 0
+Medium Issues: 3
+Low Issues: 4
+
+DETAILED RESULTS:
+[PASS] Registration Empty Name: Input properly rejected (info)
+[PASS] Registration Invalid Email Format: Input properly rejected (info)
+[PASS] Registration Short Password: Input properly rejected (info)
+[PASS] Registration Invalid Region: Input properly rejected (info)
+[PASS] Registration XSS in Name: Input properly rejected (info)
+[PASS] Registration SQL Injection in Email: Input properly rejected (info)
+[PASS] Registration Long Name Attack: Input properly rejected (info)
+[PASS] Login Empty Email: Malicious input properly rejected (info)
+[PASS] Login Empty Password: Malicious input properly rejected (info)
+[PASS] Login XSS in Email: Malicious input properly rejected (info)
+[WARN] Login SQL Injection in Password: Unexpected error: Request failed with status code 429 (low)
+[WARN] Login NoSQL Injection: Unexpected error: Request failed with status code 429 (low)
+[PASS] Report XSS in Customer Name: Malicious report input properly rejected (info)
+[PASS] Report SQL Injection in Report: Malicious report input properly rejected (info)
+[PASS] Report Invalid Date Format: Malicious report input properly rejected (info)
+[PASS] Report Invalid Classification: Malicious report input properly rejected (info)
+[PASS] Report Negative Numbers: Malicious report input properly rejected (info)
+[WARN] Parameter Tampering - User ID: Manual verification needed for parameter tampering (medium)
+[WARN] Parameter Tampering - Role Injection: Role injection test inconclusive (medium)
+[WARN] Content Type Validation: Content type test inconclusive (low)
+[WARN] XML Injection Test: XML test inconclusive (low)
+[WARN] Header Injection Test: Header injection test completed - manual review needed (medium)

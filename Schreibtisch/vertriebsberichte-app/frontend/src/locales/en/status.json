@@ -1,0 +1,20 @@
+{
+  "absenceReason": {
+    "label": "Absence Reason",
+    "none": "No Status",
+    "B": "B - Office Day",
+    "U": "U - Vacation", 
+    "K": "K - Sick Leave",
+    "note": "Only fill in case of absence"
+  },
+  "processStatus": {
+    "label": "Process Status",
+    "all": "All Status",
+    "B": "B - Processing",
+    "U": "U - Implementation",
+    "K": "K - Complete",
+    "O": "O - Open",
+    "V": "V - Postponed",
+    "I": "I - Information"
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "appName": "Vertriebsberichte",
+  "navigation": {
+    "dashboard": "Dashboard",
+    "reports": "Berichte",
+    "analytics": "Statistiken",
+    "personalAnalytics": "🔍 Analytics",
+    "globalStatistics": "Globale Auswertung",
+    "adminDashboard": "Benutzerverwaltung",
+    "logout": "Abmelden"
+  },
+  "buttons": {
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "new": "Neu",
+    "back": "Zurück",
+    "search": "Suchen",
+    "filter": "Filtern",
+    "reset": "Zurücksetzen",
+    "export": "Exportieren",
+    "loading": "Lädt..."
+  },
+  "messages": {
+    "success": "Erfolgreich",
+    "error": "Fehler",
+    "warning": "Warnung",
+    "info": "Information",
+    "confirmDelete": "Möchten Sie diesen Eintrag wirklich löschen?",
+    "noData": "Keine Daten vorhanden",
+    "loading": "Daten werden geladen..."
+  },
+  "language": {
+    "de": "Deutsch",
+    "en": "English",
+    "selectLanguage": "Sprache wählen"
+  },
+  "classification": {
+    "A": "A - Premium",
+    "B": "B - Standard", 
+    "C": "C - Basis"
+  },
+  "customerType": {
+    "all": "Alle Kunden",
+    "new": "Nur Neukunden",
+    "existing": "Nur Bestandskunden"
+  },
+  "analytics": {
+    "title": "🔍 Analytics Dashboard",
+    "subtitle": "Persönliche Leistungsanalyse für",
+    "loading": "Lade Analytics-Daten...",
+    "noData": "Keine Analytics-Daten verfügbar",
+    "errorLoading": "Fehler beim Laden der Analytics-Daten:",
+    "timeRange": {
+      "label": "Zeitraum:",
+      "last7Days": "Letzte 7 Tage",
+      "last30Days": "Letzte 30 Tage",
+      "last90Days": "Letzte 90 Tage",
+      "lastYear": "Letztes Jahr"
+    },
+    "kpi": {
+      "totalReports": "Berichte gesamt",
+      "totalRevenue": "Gesamtumsatz",
+      "avgOrderValue": "Ø Auftragswert",
+      "newCustomers": "Neukunden"
+    },
+    "charts": {
+      "monthlyTrends": "📈 Monatstrends",
+      "statusDistribution": "📋 Status-Verteilung",
+      "recentActivity": "⚡ Neueste Aktivitäten",
+      "reports": "Berichte"
+    },
+    "insights": {
+      "title": "💡 Performance-Insights",
+      "avgPerReport": "Durchschnitt pro Bericht",
+      "completionRate": "Abschlussquote",
+      "newCustomerRate": "Neukunden-Rate"
+    }
+  }
+}

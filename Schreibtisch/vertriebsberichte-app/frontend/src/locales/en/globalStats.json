@@ -1,0 +1,48 @@
+{
+  "title": "🌍 Global Statistics",
+  "subtitle": "Overview of all reports, employees and customers",
+  "accessDenied": {
+    "title": "Access Denied",
+    "message": "You don't have permission to access these global statistics."
+  },
+  "dateFilter": {
+    "title": "📅 Filter Time Period",
+    "fromDate": "From Date",
+    "toDate": "To Date",
+    "resetFilters": "Reset Filters",
+    "refresh": "Refresh"
+  },
+  "loading": "Loading global statistics...",
+  "errorLoading": "Error loading global statistics",
+  "kpis": {
+    "totalReports": "Total Reports",
+    "totalCustomers": "Total Customers", 
+    "totalOrderValue": "Total Order Value",
+    "newCustomers": "New Customers",
+    "aCustomers": "A-Customers",
+    "bCustomers": "B-Customers",
+    "cCustomers": "C-Customers"
+  },
+  "employeePerformance": {
+    "title": "🏆 Employee Performance",
+    "headers": {
+      "employee": "Employee",
+      "region": "Region",
+      "reports": "Reports",
+      "customers": "Customers",
+      "orderValue": "Order Value",
+      "avgOrderValue": "Avg Order Value"
+    }
+  },
+  "topCustomers": {
+    "title": "⭐ Top 20 Customers",
+    "headers": {
+      "customer": "Customer",
+      "class": "Class",
+      "orderValue": "Order Value",
+      "lastVisit": "Last Visit"
+    },
+    "newCustomer": "new",
+    "neverVisited": "Never"
+  }
+}

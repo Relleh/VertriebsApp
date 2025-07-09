@@ -1,0 +1,34 @@
+{
+  "title": "Dashboard",
+  "loading": "Loading dashboard...",
+  "error": "Error loading data:",
+  "statistics": {
+    "totalReports": "Total Reports",
+    "totalCustomers": "Total Customers", 
+    "newCustomers": "New Customers",
+    "totalOrderValue": "Total Order Value",
+    "totalOfferValue": "Total Offer Value",
+    "lastWeek": "Last week:",
+    "lastMonth": "Last month:"
+  },
+  "sections": {
+    "recentReports": "Recent Reports",
+    "reportsLastWeek": "Reports last week",
+    "reportsLastMonth": "Reports last month"
+  },
+  "table": {
+    "customer": "Customer",
+    "date": "Date",
+    "location": "Location",
+    "class": "Class",
+    "orderValue": "Order Value"
+  },
+  "actions": {
+    "viewAll": "View all →",
+    "createFirst": "Create first report"
+  },
+  "empty": {
+    "noReports": "No reports available yet.",
+    "createFirstReport": "Create first report"
+  }
+}
