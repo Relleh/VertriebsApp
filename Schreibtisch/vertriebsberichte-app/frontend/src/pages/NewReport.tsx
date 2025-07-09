@@ -13,7 +13,7 @@ const createReportSchema = (t: any) => z.object({
   ort: z.string().min(1, t('reports:validation.locationRequired')),
   datum: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, t('reports:validation.invalidDateFormat')),
   kurzbericht: z.string().min(10, t('reports:validation.shortReportMinLength')),
-  todos: z.string().optional(),
+  todos: z.string().min(1, t('reports:validation.todosRequired')),
   klassifizierung: z.enum(['A', 'B', 'C']),
   auftragswert: z.string().transform((val) => val ? parseFloat(val) : undefined).optional(),
   angebotswert: z.string().transform((val) => val ? parseFloat(val) : undefined).optional(),
@@ -180,13 +180,16 @@ const NewReport = () => {
 
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            {t('reports:fields.todos')}
+            {t('reports:fields.todos')} *
           </label>
           <textarea
             {...register('todos')}
             rows={3}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
           />
+          {errors.todos && (
+            <p className="mt-1 text-sm text-red-600">{errors.todos.message}</p>
+          )}
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">

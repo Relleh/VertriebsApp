@@ -29,6 +29,7 @@
     "locationRequired": "Ort ist erforderlich",
     "invalidDateFormat": "Ungültiges Datumsformat",
     "shortReportMinLength": "Kurzbericht muss mindestens 10 Zeichen lang sein",
+    "todosRequired": "Todos sind erforderlich",
     "invalidClassification": "Klassifizierung muss A, B oder C sein"
   },
   "messages": {

@@ -89,7 +89,7 @@ export const reportSchema = z.object({
         return date instanceof Date && !isNaN(date.getTime());
       }, 'Ungültiges Datum'),
     kurzbericht: secureText(10, 2000, 'Kurzbericht'),
-    todos: secureOptionalText(1000, 'Todos'),
+    todos: secureText(1, 1000, 'Todos'),
     klassifizierung: z.enum(['A', 'B', 'C'], {
       errorMap: () => ({ message: 'Klassifizierung muss A, B oder C sein' })
     }),
@@ -125,7 +125,7 @@ export const updateReportSchema = z.object({
         return date instanceof Date && !isNaN(date.getTime());
       }, 'Ungültiges Datum'),
     kurzbericht: secureText(10, 2000, 'Kurzbericht'),
-    todos: secureOptionalText(1000, 'Todos'),
+    todos: secureText(1, 1000, 'Todos'),
     klassifizierung: z.enum(['A', 'B', 'C'], {
       errorMap: () => ({ message: 'Klassifizierung muss A, B oder C sein' })
     }),
