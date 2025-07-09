@@ -82,16 +82,31 @@ const EditReport = () => {
       setIsSubmitting(true);
       
       const submitData = {
-        ...data,
+        ansprechpartner: data.ansprechpartner,
+        ort: data.ort,
+        datum: data.datum,
+        kurzbericht: data.kurzbericht,
+        todos: data.todos,
+        klassifizierung: data.klassifizierung,
         auftragswert: data.auftragswert || 0,
         angebotswert: data.angebotswert || 0,
         naechsterBesuch: data.naechsterBesuch || undefined,
+        neukunde: data.neukunde,
+        uebernachtung: data.uebernachtung,
+        status: data.status,
       };
 
       await axios.put(`/api/reports/${id}`, submitData);
       navigate('/reports');
     } catch (err: any) {
-      setError(err.response?.data?.message || t('reports:messages.saveError'));
+      if (err.response?.data?.errors && Array.isArray(err.response.data.errors)) {
+        const errorMessages = err.response.data.errors
+          .map((e: any) => `${e.field}: ${e.message}`)
+          .join('\n');
+        setError(`${err.response.data.message || t('reports:messages.saveError')}\n\n${errorMessages}`);
+      } else {
+        setError(err.response?.data?.message || t('reports:messages.saveError'));
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -111,7 +126,7 @@ const EditReport = () => {
 
       {error && (
         <div className="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-          {error}
+          <pre className="whitespace-pre-wrap font-sans">{error}</pre>
         </div>
       )}
 

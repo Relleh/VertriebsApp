@@ -6,10 +6,10 @@ const secureName = z.string()
   .min(2, 'Name muss mindestens 2 Zeichen lang sein')
   .max(100, 'Name darf maximal 100 Zeichen lang sein')
   .refine((val) => validateXSSSafe(val), {
-    message: 'Name enthält unzulässige Zeichen oder Script-Inhalte'
+    message: 'Name enthält unzulässige Script-Inhalte (z.B. <script> Tags)'
   })
   .refine((val) => validateSQLSafe(val), {
-    message: 'Name enthält potenziell gefährliche Inhalte'
+    message: 'Name enthält potenzielle SQL-Injection-Muster (z.B. SQL-Kommentare)'
   })
   .transform((val) => {
     const result = sanitizeInput(val, { maxLength: 100, allowHTML: false });
@@ -21,10 +21,10 @@ const secureText = (minLength: number, maxLength: number, fieldName: string) =>
     .min(minLength, `${fieldName} muss mindestens ${minLength} Zeichen lang sein`)
     .max(maxLength, `${fieldName} darf maximal ${maxLength} Zeichen lang sein`)
     .refine((val) => validateXSSSafe(val), {
-      message: `${fieldName} enthält unzulässige Script-Inhalte`
+      message: `${fieldName} enthält unzulässige Script-Inhalte (z.B. <script> Tags)`
     })
     .refine((val) => validateSQLSafe(val), {
-      message: `${fieldName} enthält potenziell gefährliche SQL-Inhalte`
+      message: `${fieldName} enthält potenzielle SQL-Injection-Muster (z.B. SQL-Kommentare "--" oder "/*")`
     })
     .transform((val) => {
       const result = sanitizeInput(val, { maxLength, allowHTML: false });
@@ -35,10 +35,10 @@ const secureOptionalText = (maxLength: number, fieldName: string) =>
   z.string()
     .max(maxLength, `${fieldName} darf maximal ${maxLength} Zeichen lang sein`)
     .refine((val) => validateXSSSafe(val), {
-      message: `${fieldName} enthält unzulässige Script-Inhalte`
+      message: `${fieldName} enthält unzulässige Script-Inhalte (z.B. <script> Tags)`
     })
     .refine((val) => validateSQLSafe(val), {
-      message: `${fieldName} enthält potenziell gefährliche SQL-Inhalte`
+      message: `${fieldName} enthält potenzielle SQL-Injection-Muster (z.B. SQL-Kommentare "--" oder "/*")`
     })
     .transform((val) => {
       const result = sanitizeInput(val, { maxLength, allowHTML: false });
@@ -108,7 +108,7 @@ export const reportSchema = z.object({
       .optional(),
     neukunde: z.boolean(),
     uebernachtung: z.boolean(),
-    status: z.enum(['B', 'U', 'K', 'O', 'V', 'I'], {
+    status: z.enum(['B', 'U', 'K'], {
       errorMap: () => ({ message: 'Ungültiger Status' })
     }).optional(),
   }).strict(), // Reject any additional properties
@@ -144,7 +144,7 @@ export const updateReportSchema = z.object({
       .optional(),
     neukunde: z.boolean(),
     uebernachtung: z.boolean(),
-    status: z.enum(['B', 'U', 'K', 'O', 'V', 'I'], {
+    status: z.enum(['B', 'U', 'K'], {
       errorMap: () => ({ message: 'Ungültiger Status' })
     }).optional(),
   }).strict(), // Reject any additional properties

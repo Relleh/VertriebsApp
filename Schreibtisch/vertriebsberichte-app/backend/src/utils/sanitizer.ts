@@ -8,9 +8,13 @@ const purify = DOMPurify(window);
 
 // SQL injection patterns to detect and reject
 const SQL_INJECTION_PATTERNS = [
-  /('|(\\)|;|\||&)/,
-  /(union|select|insert|update|delete|drop|create|alter|exec|execute)/i,
-  /(--|\/\*|\*\/)/,
+  // Match SQL comments
+  /(--|\/\*|\*\/|#)/,
+  // Match dangerous SQL keywords with word boundaries to avoid false positives
+  /\b(union\s+select|select\s+\*|insert\s+into|update\s+\w+\s+set|delete\s+from|drop\s+(table|database)|create\s+(table|database)|alter\s+table|exec\s*\(|execute\s+)/i,
+  // Match common SQL injection attempts
+  /(\'\s*or\s*\'|\'\s*and\s*\'|\'\s*--|\';|1\s*=\s*1|1\s*=\s*\'1)/i,
+  // Match script tags and javascript
   /(script|javascript|vbscript|onload|onerror|onclick)/i,
   /(\<script|\<\/script\>)/i
 ];
@@ -122,13 +126,13 @@ export function sanitizeInput(input: string, options: {
 
   // SQL injection validation
   if (options.stripSQL !== false && !validateSQLSafe(sanitizedValue)) {
-    errors.push('Input contains potentially dangerous SQL patterns');
+    errors.push('Der Text enthält potentiell gefährliche SQL-Muster (z.B. SQL-Kommentare oder Injection-Versuche)');
     return { value: '', isValid: false, errors };
   }
 
   // XSS validation
   if (options.stripXSS !== false && !validateXSSSafe(sanitizedValue)) {
-    errors.push('Input contains potentially dangerous script content');
+    errors.push('Der Text enthält potentiell gefährliche Script-Inhalte (z.B. <script> Tags oder JavaScript)');
     return { value: '', isValid: false, errors };
   }
 
