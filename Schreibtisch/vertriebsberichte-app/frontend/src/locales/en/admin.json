@@ -1,5 +1,5 @@
 {
-  "title": "👑 Admin Dashboard",
+  "title": "Admin Dashboard",
   "welcome": "Welcome, {{name}}! Manage users and roles.",
   "accessDenied": {
     "title": "Access Denied",
@@ -12,7 +12,7 @@
     "employees": "Employees"
   },
   "userManagement": {
-    "title": "👥 All Users",
+    "title": "All Users",
     "table": {
       "user": "User",
       "role": "Role",
@@ -26,7 +26,7 @@
     }
   },
   "roleAssignment": {
-    "title": "🔧 Assign Role",
+    "title": "Assign Role",
     "selectUser": "Select User",
     "selectRole": "New Role",
     "userPlaceholder": "-- Select User --",

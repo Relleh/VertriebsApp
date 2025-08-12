@@ -162,12 +162,7 @@ const Analytics = () => {
         <div className="bg-white overflow-hidden shadow rounded-lg">
           <div className="p-5">
             <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-blue-500 rounded-md flex items-center justify-center">
-                  <span className="text-white font-bold">📄</span>
-                </div>
-              </div>
-              <div className="ml-5 w-0 flex-1">
+              <div className="flex-1">
                 <dl>
                   <dt className="text-sm font-medium text-gray-500 truncate">
                     {t('common:analytics.kpi.totalReports')}
@@ -184,12 +179,7 @@ const Analytics = () => {
         <div className="bg-white overflow-hidden shadow rounded-lg">
           <div className="p-5">
             <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-green-500 rounded-md flex items-center justify-center">
-                  <span className="text-white font-bold">💰</span>
-                </div>
-              </div>
-              <div className="ml-5 w-0 flex-1">
+              <div className="flex-1">
                 <dl>
                   <dt className="text-sm font-medium text-gray-500 truncate">
                     {t('common:analytics.kpi.totalRevenue')}
@@ -206,12 +196,7 @@ const Analytics = () => {
         <div className="bg-white overflow-hidden shadow rounded-lg">
           <div className="p-5">
             <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-yellow-500 rounded-md flex items-center justify-center">
-                  <span className="text-white font-bold">📊</span>
-                </div>
-              </div>
-              <div className="ml-5 w-0 flex-1">
+              <div className="flex-1">
                 <dl>
                   <dt className="text-sm font-medium text-gray-500 truncate">
                     {t('common:analytics.kpi.avgOrderValue')}
@@ -228,12 +213,7 @@ const Analytics = () => {
         <div className="bg-white overflow-hidden shadow rounded-lg">
           <div className="p-5">
             <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-purple-500 rounded-md flex items-center justify-center">
-                  <span className="text-white font-bold">🆕</span>
-                </div>
-              </div>
-              <div className="ml-5 w-0 flex-1">
+              <div className="flex-1">
                 <dl>
                   <dt className="text-sm font-medium text-gray-500 truncate">
                     {t('common:analytics.kpi.newCustomers')}
@@ -314,26 +294,19 @@ const Analytics = () => {
             {analyticsData.recentActivity.map((activity, index) => (
               <li key={index} className="px-6 py-4 hover:bg-gray-50">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0">
-                      <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center">
-                        <span className="text-indigo-600 font-medium text-sm">📄</span>
-                      </div>
+                  <div>
+                    <div className="text-sm font-medium text-gray-900">
+                      {activity.kunde_name}
                     </div>
-                    <div className="ml-4">
-                      <div className="text-sm font-medium text-gray-900">
-                        {activity.kunde_name}
-                      </div>
-                      <div className="text-sm text-gray-500">
-                        {new Date(activity.date).toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'de-DE')}
-                      </div>
+                    <div className="text-sm text-gray-500">
+                      {new Date(activity.date).toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'de-DE')}
                     </div>
                   </div>
                   <div className="flex items-center space-x-4">
                     <div className="text-sm font-medium text-gray-900">
                       {formatCurrency(activity.auftragswert)}
                     </div>
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(activity.status)}`}>
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(activity.status)}`}> 
                       {t(`status:process.${activity.status.toLowerCase()}`, { defaultValue: activity.status })}
                     </span>
                   </div>

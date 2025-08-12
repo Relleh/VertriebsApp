@@ -4,7 +4,7 @@
     "dashboard": "Dashboard",
     "reports": "Reports",
     "analytics": "Analytics",
-    "personalAnalytics": "🔍 Analytics",
+    "personalAnalytics": "Analytics",
     "globalStatistics": "Global Statistics",
     "adminDashboard": "User Management",
     "logout": "Logout"
@@ -47,7 +47,7 @@
     "existing": "Existing Customers Only"
   },
   "analytics": {
-    "title": "🔍 Analytics Dashboard",
+    "title": "Analytics Dashboard",
     "subtitle": "Personal performance analysis for",
     "loading": "Loading analytics data...",
     "noData": "No analytics data available",
@@ -66,13 +66,13 @@
       "newCustomers": "New Customers"
     },
     "charts": {
-      "monthlyTrends": "📈 Monthly Trends",
-      "statusDistribution": "📋 Status Distribution",
-      "recentActivity": "⚡ Recent Activity",
+      "monthlyTrends": "Monthly Trends",
+      "statusDistribution": "Status Distribution",
+      "recentActivity": "Recent Activity",
       "reports": "reports"
     },
     "insights": {
-      "title": "💡 Performance Insights",
+      "title": "Performance Insights",
       "avgPerReport": "Average per report",
       "completionRate": "Completion rate",
       "newCustomerRate": "New customer rate"

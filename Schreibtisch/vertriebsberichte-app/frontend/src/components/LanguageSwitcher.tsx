@@ -15,8 +15,8 @@ const LanguageSwitcher = () => {
         className="px-3 py-1 text-sm bg-gray-700 text-white border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 hover:bg-gray-600"
         title={t('common:language.selectLanguage')}
       >
-        <option value="de">🇩🇪 DE</option>
-        <option value="en">🇬🇧 EN</option>
+        <option value="de">DE</option>
+        <option value="en">EN</option>
       </select>
     </div>
   );

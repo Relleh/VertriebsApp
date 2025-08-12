@@ -1,12 +1,12 @@
 {
-  "title": "🌍 Globale Auswertungen",
+  "title": "Globale Auswertungen",
   "subtitle": "Übersicht aller Berichte, Mitarbeiter und Kunden",
   "accessDenied": {
     "title": "Zugriff verweigert",
     "message": "Sie haben keine Berechtigung für diese globalen Auswertungen."
   },
   "dateFilter": {
-    "title": "📅 Zeitraum filtern",
+    "title": "Zeitraum filtern",
     "fromDate": "Von Datum",
     "toDate": "Bis Datum",
     "resetFilters": "Filter zurücksetzen",
@@ -24,7 +24,7 @@
     "cCustomers": "C-Kunden"
   },
   "employeePerformance": {
-    "title": "🏆 Mitarbeiter-Performance",
+    "title": "Mitarbeiter-Performance",
     "headers": {
       "employee": "Mitarbeiter",
       "region": "Region",
@@ -35,7 +35,7 @@
     }
   },
   "topCustomers": {
-    "title": "⭐ Top 20 Kunden",
+    "title": "Top 20 Kunden",
     "headers": {
       "customer": "Kunde",
       "class": "Klasse",
