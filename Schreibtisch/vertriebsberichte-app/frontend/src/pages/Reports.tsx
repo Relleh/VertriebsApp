@@ -165,10 +165,10 @@ const Reports = () => {
                         <div className="flex items-center justify-between">
                           <div>
                             <p className="text-sm font-medium text-indigo-600 truncate">
-                              🏢 {report.kunde_name} ({report.kunde_nr})
+                               {report.kunde_name} ({report.kunde_nr})
                             </p>
                             <p className="text-sm text-gray-500">
-                              👤 {report.ansprechpartner} • 📍 {report.ort}
+                               {report.ansprechpartner} •  {report.ort}
                             </p>
                             {report.mitarbeiter_name && (
                               <p className="text-sm text-gray-500">
@@ -200,10 +200,10 @@ const Reports = () => {
                         <div className="mt-2 sm:flex sm:justify-between">
                           <div className="sm:flex sm:space-x-4">
                             <p className="flex items-center text-sm text-gray-500">
-                              📅 {format(new Date(report.datum), 'dd.MM.yyyy', { locale: de })}
+                               {format(new Date(report.datum), 'dd.MM.yyyy', { locale: de })}
                             </p>
                             <p className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                              🌍 {report.region_name}
+                               {report.region_name}
                             </p>
                           </div>
                           <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 space-x-4">
@@ -323,7 +323,6 @@ const Reports = () => {
         </>
       ) : (
         <div className="text-center py-12 bg-white rounded-lg shadow">
-          <div className="text-6xl mb-4">📋</div>
           <h3 className="text-lg font-medium text-gray-900 mb-2">
             {Object.values(filters).some(v => v !== '' && v !== 'datum' && v !== 'desc')
               ? t('reports:empty.noReportsFound')

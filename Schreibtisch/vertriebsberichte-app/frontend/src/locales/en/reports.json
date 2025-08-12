@@ -40,58 +40,58 @@
     "loadReportError": "Error loading report"
   },
   "filters": {
-    "title": "🔍 Advanced Filters",
+    "title": "Advanced Filters",
     "activeLabel": "Filters Active",
     "reset": "Reset",
     "resetAll": "Reset All Filters",
     "close": "Close Filters",
     "activeMessage": "Filters are active - results are automatically filtered",
     "search": {
-      "label": "🔎 Quick Search",
+      "label": "Quick Search",
       "placeholder": "Search in reports, todos, customer names, contacts..."
     },
     "dates": {
-      "fromDate": "📅 From Date",
-      "toDate": "📅 To Date"
+      "fromDate": "From Date",
+      "toDate": "To Date"
     },
     "customer": {
-      "number": "🏷️ Customer Number",
+      "number": "️ Customer Number",
       "numberPlaceholder": "e.g. K12345",
-      "name": "🏢 Customer Name", 
+      "name": "Customer Name", 
       "namePlaceholder": "e.g. Example Corp"
     },
     "employee": {
-      "name": "👤 Employee Name",
+      "name": "Employee Name",
       "placeholder": "e.g. John Doe"
     },
     "location": {
-      "label": "📍 Location",
+      "label": "Location",
       "placeholder": "e.g. Munich"
     },
     "classification": {
-      "label": "⭐ Classification",
+      "label": "Classification",
       "all": "All Classes",
       "premium": "A - Premium",
       "standard": "B - Standard", 
       "basic": "C - Basic"
     },
     "status": {
-      "label": "📋 Status"
+      "label": "Status"
     },
     "newCustomer": {
-      "label": "🆕 New Customer",
+      "label": "New Customer",
       "all": "All Customers",
       "onlyNew": "New Customers Only", 
       "onlyExisting": "Existing Customers Only"
     },
     "orderValue": {
-      "min": "💰 Min. Order Value (€)",
-      "max": "💰 Max. Order Value (€)",
+      "min": "Min. Order Value (€)",
+      "max": "Max. Order Value (€)",
       "minPlaceholder": "e.g. 1000",
       "maxPlaceholder": "e.g. 50000"
     },
     "sorting": {
-      "sortBy": "🔄 Sort by",
+      "sortBy": "Sort by",
       "sortOrder": "↕️ Sort Order",
       "fields": {
         "date": "Date",
@@ -118,17 +118,17 @@
     "nextVisit": "Next Visit"
   },
   "list": {
-    "title": "📋 Visit Reports",
+    "title": "Visit Reports",
     "loading": "Loading reports...",
     "found": "reports found",
-    "newReport": "➕ New Report",
-    "employee": "🧑‍💼 Employee:",
+    "newReport": "New Report",
+    "employee": "Employee:",
     "shortReportLabel": "Short report:",
-    "edit": "✏️ Edit",
-    "delete": "🗑️ Delete",
-    "orderLabel": "💰 Order:",
-    "offerLabel": "📊 Offer:",
-    "newCustomerBadge": "🆕 New Customer",
+    "edit": "️ Edit",
+    "delete": "️ Delete",
+    "orderLabel": "Order:",
+    "offerLabel": "Offer:",
+    "newCustomerBadge": "New Customer",
     "deleteConfirm": "Do you really want to delete this report?",
     "deleteError": "Error deleting report"
   },
@@ -145,7 +145,7 @@
     "noReportsYet": "No reports available yet",
     "adjustFilters": "Try adjusting your filters or resetting them.",
     "createFirst": "Create your first visit report.",
-    "createFirstButton": "➕ Create First Report"
+    "createFirstButton": "Create First Report"
   },
   "edit": {
     "classification": {

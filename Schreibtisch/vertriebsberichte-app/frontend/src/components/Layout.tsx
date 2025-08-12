@@ -86,7 +86,7 @@ const Layout = () => {
                   {/* Dashboard */}
                   <NavLink to="/dashboard" className={navLinkClass}>
                     <span className="flex items-center">
-                      📊 {t('common:navigation.dashboard')}
+                       {t('common:navigation.dashboard')}
                     </span>
                   </NavLink>
 
@@ -96,7 +96,7 @@ const Layout = () => {
                       onClick={() => setIsReportsDropdownOpen(!isReportsDropdownOpen)}
                       className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200 flex items-center"
                     >
-                      📋 {t('common:navigation.reports')}
+                       {t('common:navigation.reports')}
                       <svg className="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
@@ -105,10 +105,10 @@ const Layout = () => {
                       <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5 z-50">
                         <div className="py-1">
                           <NavLink to="/reports" className={dropdownLinkClass} onClick={() => setIsReportsDropdownOpen(false)}>
-                            📄 {t('common:navigation.reports')}
+                             {t('common:navigation.reports')}
                           </NavLink>
                           <NavLink to="/reports/new" className={dropdownLinkClass} onClick={() => setIsReportsDropdownOpen(false)}>
-                            ➕ {t('common:buttons.new')}
+                             {t('common:buttons.new')}
                           </NavLink>
                         </div>
                       </div>
@@ -121,7 +121,7 @@ const Layout = () => {
                       onClick={() => setIsAnalyticsDropdownOpen(!isAnalyticsDropdownOpen)}
                       className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200 flex items-center"
                     >
-                      📈 {t('common:navigation.analytics')}
+                       {t('common:navigation.analytics')}
                       <svg className="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
@@ -130,7 +130,7 @@ const Layout = () => {
                       <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5 z-50">
                         <div className="py-1">
                           <NavLink to="/statistics" className={dropdownLinkClass} onClick={() => setIsAnalyticsDropdownOpen(false)}>
-                            📊 {t('common:navigation.analytics')}
+                             {t('common:navigation.analytics')}
                           </NavLink>
                           <WithPermission permission="view_analytics">
                             <NavLink to="/analytics" className={dropdownLinkClass} onClick={() => setIsAnalyticsDropdownOpen(false)}>
@@ -139,7 +139,7 @@ const Layout = () => {
                           </WithPermission>
                           <ManagerOrAdmin>
                             <NavLink to="/statistics/global" className={dropdownLinkClass} onClick={() => setIsAnalyticsDropdownOpen(false)}>
-                              🌍 {t('common:navigation.globalStatistics')}
+                               {t('common:navigation.globalStatistics')}
                             </NavLink>
                           </ManagerOrAdmin>
                         </div>
@@ -154,7 +154,7 @@ const Layout = () => {
                         onClick={() => setIsAdminDropdownOpen(!isAdminDropdownOpen)}
                         className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200 flex items-center"
                       >
-                        ⚙️ {t('common:navigation.adminDashboard')}
+                        {t('common:navigation.adminDashboard')}
                         <svg className="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                         </svg>
@@ -163,7 +163,7 @@ const Layout = () => {
                         <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5 z-50">
                           <div className="py-1">
                             <NavLink to="/admin/users" className={dropdownLinkClass} onClick={() => setIsAdminDropdownOpen(false)}>
-                              👥 {t('common:navigation.adminDashboard')}
+                               {t('common:navigation.adminDashboard')}
                             </NavLink>
                           </div>
                         </div>
@@ -187,9 +187,9 @@ const Layout = () => {
                   <div className="text-sm font-medium">{user?.name}</div>
                   {userPermissions?.roleName && (
                     <div className="text-xs text-gray-400">
-                      {userPermissions.roleName === 'admin' && `👑 ${t('auth:roles.admin')}`}
-                      {userPermissions.roleName === 'manager' && `📊 ${t('auth:roles.manager')}`}
-                      {userPermissions.roleName === 'employee' && `👤 ${t('auth:roles.employee')}`}
+                      {userPermissions.roleName === 'admin' && t('auth:roles.admin')}
+                      {userPermissions.roleName === 'manager' && t('auth:roles.manager')}
+                      {userPermissions.roleName === 'employee' && t('auth:roles.employee')}
                     </div>
                   )}
                 </div>
@@ -228,24 +228,24 @@ const Layout = () => {
                   <div className="text-sm font-medium">{user?.name}</div>
                   {userPermissions?.roleName && (
                     <div className="text-xs text-gray-400">
-                      {userPermissions.roleName === 'admin' && `👑 ${t('auth:roles.admin')}`}
-                      {userPermissions.roleName === 'manager' && `📊 ${t('auth:roles.manager')}`}
-                      {userPermissions.roleName === 'employee' && `👤 ${t('auth:roles.employee')}`}
+                      {userPermissions.roleName === 'admin' && t('auth:roles.admin')}
+                      {userPermissions.roleName === 'manager' && t('auth:roles.manager')}
+                      {userPermissions.roleName === 'employee' && t('auth:roles.employee')}
                     </div>
                   )}
                 </div>
 
                 <NavLink to="/dashboard" className={mobileNavLinkClass} onClick={() => setIsMobileMenuOpen(false)}>
-                  📊 {t('common:navigation.dashboard')}
+                   {t('common:navigation.dashboard')}
                 </NavLink>
                 <NavLink to="/reports" className={mobileNavLinkClass} onClick={() => setIsMobileMenuOpen(false)}>
-                  📄 {t('common:navigation.reports')}
+                   {t('common:navigation.reports')}
                 </NavLink>
                 <NavLink to="/reports/new" className={mobileNavLinkClass} onClick={() => setIsMobileMenuOpen(false)}>
-                  ➕ {t('common:buttons.new')}
+                   {t('common:buttons.new')}
                 </NavLink>
                 <NavLink to="/statistics" className={mobileNavLinkClass} onClick={() => setIsMobileMenuOpen(false)}>
-                  📊 {t('common:navigation.analytics')}
+                   {t('common:navigation.analytics')}
                 </NavLink>
                 <WithPermission permission="view_analytics">
                   <NavLink to="/analytics" className={mobileNavLinkClass} onClick={() => setIsMobileMenuOpen(false)}>
@@ -254,12 +254,12 @@ const Layout = () => {
                 </WithPermission>
                 <ManagerOrAdmin>
                   <NavLink to="/statistics/global" className={mobileNavLinkClass} onClick={() => setIsMobileMenuOpen(false)}>
-                    🌍 {t('common:navigation.globalStatistics')}
+                     {t('common:navigation.globalStatistics')}
                   </NavLink>
                 </ManagerOrAdmin>
                 <WithPermission permission="manage_users">
                   <NavLink to="/admin/users" className={mobileNavLinkClass} onClick={() => setIsMobileMenuOpen(false)}>
-                    👥 {t('common:navigation.adminDashboard')}
+                     {t('common:navigation.adminDashboard')}
                   </NavLink>
                 </WithPermission>
                 
@@ -274,7 +274,7 @@ const Layout = () => {
                   onClick={handleLogout}
                   className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200 mt-2"
                 >
-                  🚪 {t('common:navigation.logout')}
+                   {t('common:navigation.logout')}
                 </button>
               </div>
             </div>

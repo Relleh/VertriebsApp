@@ -1,12 +1,12 @@
 {
-  "title": "🌍 Global Statistics",
+  "title": "Global Statistics",
   "subtitle": "Overview of all reports, employees and customers",
   "accessDenied": {
     "title": "Access Denied",
     "message": "You don't have permission to access these global statistics."
   },
   "dateFilter": {
-    "title": "📅 Filter Time Period",
+    "title": "Filter Time Period",
     "fromDate": "From Date",
     "toDate": "To Date",
     "resetFilters": "Reset Filters",
@@ -24,7 +24,7 @@
     "cCustomers": "C-Customers"
   },
   "employeePerformance": {
-    "title": "🏆 Employee Performance",
+    "title": "Employee Performance",
     "headers": {
       "employee": "Employee",
       "region": "Region",
@@ -35,7 +35,7 @@
     }
   },
   "topCustomers": {
-    "title": "⭐ Top 20 Customers",
+    "title": "Top 20 Customers",
     "headers": {
       "customer": "Customer",
       "class": "Class",

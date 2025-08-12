@@ -73,15 +73,6 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  const getRoleIcon = (roleName: string | null) => {
-    switch (roleName) {
-      case 'admin': return '👑';
-      case 'manager': return '📊';
-      case 'employee': return '👤';
-      default: return '❓';
-    }
-  };
-
   const getRoleBadgeColor = (roleName: string | null) => {
     switch (roleName) {
       case 'admin': return 'bg-red-100 text-red-800';
@@ -126,10 +117,7 @@ const AdminDashboard: React.FC = () => {
           <div className="bg-white overflow-hidden shadow rounded-lg">
             <div className="p-5">
               <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <span className="text-2xl">👥</span>
-                </div>
-                <div className="ml-5 w-0 flex-1">
+                <div className="flex-1">
                   <dl>
                     <dt className="text-sm font-medium text-gray-500 truncate">
                       {t('admin:statistics.totalUsers')}
@@ -146,10 +134,7 @@ const AdminDashboard: React.FC = () => {
           <div className="bg-white overflow-hidden shadow rounded-lg">
             <div className="p-5">
               <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <span className="text-2xl">👑</span>
-                </div>
-                <div className="ml-5 w-0 flex-1">
+                <div className="flex-1">
                   <dl>
                     <dt className="text-sm font-medium text-gray-500 truncate">
                       {t('admin:statistics.administrators')}
@@ -166,10 +151,7 @@ const AdminDashboard: React.FC = () => {
           <div className="bg-white overflow-hidden shadow rounded-lg">
             <div className="p-5">
               <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <span className="text-2xl">📊</span>
-                </div>
-                <div className="ml-5 w-0 flex-1">
+                <div className="flex-1">
                   <dl>
                     <dt className="text-sm font-medium text-gray-500 truncate">
                       {t('admin:statistics.managers')}
@@ -186,10 +168,7 @@ const AdminDashboard: React.FC = () => {
           <div className="bg-white overflow-hidden shadow rounded-lg">
             <div className="p-5">
               <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <span className="text-2xl">👤</span>
-                </div>
-                <div className="ml-5 w-0 flex-1">
+                <div className="flex-1">
                   <dl>
                     <dt className="text-sm font-medium text-gray-500 truncate">
                       {t('admin:statistics.employees')}
@@ -243,7 +222,7 @@ const AdminDashboard: React.FC = () => {
                 <option value="">{t('admin:roleAssignment.rolePlaceholder')}</option>
                 {roles.map(role => (
                   <option key={role.id} value={role.id}>
-                    {getRoleIcon(role.name)} {role.name} - {role.description}
+                    {role.name} - {role.description}
                   </option>
                 ))}
               </select>
@@ -265,7 +244,7 @@ const AdminDashboard: React.FC = () => {
               <p className="text-sm text-blue-800">
                 <strong>{t('admin:userManagement.roleInfo.current')}</strong> {selectedUser.name} {t('admin:userManagement.roleInfo.hasRole')}{' '}
                 <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getRoleBadgeColor(selectedUser.roleName)}`}>
-                  {getRoleIcon(selectedUser.roleName)} {selectedUser.roleName || t('admin:userManagement.roleInfo.noRole')}
+                  {selectedUser.roleName || t('admin:userManagement.roleInfo.noRole')}
                 </span>
               </p>
             </div>
@@ -308,7 +287,7 @@ const AdminDashboard: React.FC = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getRoleBadgeColor(user.roleName)}`}>
-                        {getRoleIcon(user.roleName)} {user.roleName || t('admin:userManagement.roleInfo.noRole')}
+                        {user.roleName || t('admin:userManagement.roleInfo.noRole')}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
