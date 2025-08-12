@@ -55,6 +55,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } else {
       setIsLoading(false);
     }
+
+    const requestInterceptor = axios.interceptors.request.use((config) => {
+      const storedToken = localStorage.getItem('token');
+      if (storedToken) {
+        config.headers = config.headers || {};
+        config.headers['Authorization'] = `Bearer ${storedToken}`;
+      }
+      return config;
+    });
+
+    return () => {
+      axios.interceptors.request.eject(requestInterceptor);
+    };
   }, []);
 
   const fetchUserProfile = async () => {
