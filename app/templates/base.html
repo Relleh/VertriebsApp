@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="{{ 'de' if locale == 'de' else 'en' }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{{ t('app_title') }}</title>
+    <link rel="stylesheet" href="/static/styles.css?v=20250117">
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container row space-between">
+        <div class="brand">{{ t('app_title') }}</div>
+        <nav class="row gap">
+          <div class="fun-mode-toggle">
+            <label class="toggle-switch">
+              <input type="checkbox" id="funModeToggle">
+              <span class="toggle-slider"></span>
+            </label>
+            <span class="toggle-label">{{ t('fun_mode') }}</span>
+          </div>
+          <div class="language-dropdown">
+            <select onchange="changeLanguage(this.value)" class="language-select" id="languageSelect">
+              <option value="de" {% if locale=='de' %}selected{% endif %}>{{ t('lang_de') }}</option>
+              <option value="en" {% if locale=='en' %}selected{% endif %}>{{ t('lang_en') }}</option>
+            </select>
+          </div>
+          {% if user %}
+            <span class="user-info">👤 {{ user.name or user.email }}</span>
+            <a href="/reports">{{ t('my_reports') }}</a>
+            <a href="/logout">{{ t('logout') }}</a>
+          {% else %}
+            <a href="/login">{{ t('login') }}</a>
+          {% endif %}
+        </nav>
+      </div>
+    </header>
+    <main class="container">
+      {% block content %}{% endblock %}
+    </main>
+    <script>
+      // Utility function to get cookie value
+      function getCookie(name) {
+        const value = "; " + document.cookie;
+        const parts = value.split("; " + name + "=");
+        if (parts.length === 2) return parts.pop().split(";").shift();
+        return null;
+      }
+      
+      // Language management
+      function changeLanguage(lang) {
+        // Store in localStorage for immediate updates
+        localStorage.setItem('locale', lang);
+        
+        // Navigate to set-locale endpoint (will set cookie)
+        window.location.href = '/set-locale?lang=' + lang;
+      }
+      
+      // Initialize language settings
+      function initializeLanguage() {
+        const languageSelect = document.getElementById('languageSelect');
+        if (!languageSelect) return;
+        
+        // Get saved language from localStorage or cookie
+        let savedLocale = localStorage.getItem('locale');
+        const cookieLocale = getCookie('locale');
+        
+        // Sync localStorage with cookie if different
+        if (cookieLocale && cookieLocale !== savedLocale) {
+          localStorage.setItem('locale', cookieLocale);
+          savedLocale = cookieLocale;
+        }
+        
+        // Set select value if we have a saved preference
+        if (savedLocale && ['de', 'en'].includes(savedLocale)) {
+          languageSelect.value = savedLocale;
+        }
+        
+        // Store current selection in localStorage
+        localStorage.setItem('locale', languageSelect.value);
+      }
+      
+      // Fun Mode Toggle Logic
+      function initializeFunMode() {
+        const funModeToggle = document.getElementById('funModeToggle');
+        if (!funModeToggle) return;
+        
+        // Load saved preference
+        const isFunMode = localStorage.getItem('funMode') === 'true';
+        funModeToggle.checked = isFunMode;
+        
+        // Handle toggle changes
+        funModeToggle.addEventListener('change', function() {
+          localStorage.setItem('funMode', this.checked);
+        });
+      }
+      
+      // Initialize all features when DOM is ready
+      document.addEventListener('DOMContentLoaded', function() {
+        initializeLanguage();
+        initializeFunMode();
+      });
+    </script>
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

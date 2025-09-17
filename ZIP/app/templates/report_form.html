@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>{{ t('new_report') if not report else t('edit_report') }}</h2>
+  <form method="post" action="{{ action }}" id="reportForm">
+    <div class="grid two">
+      <label>
+        {{ t('customer_no') }}
+        <input required name="customer_no" id="customer_no" value="{{ report.customer_no if report else '' }}">
+      </label>
+      <label>
+        {{ t('customer_name') }}
+        <input required name="customer_name" id="customer_name" value="{{ report.customer_name if report else '' }}">
+      </label>
+      <label>
+        {{ t('contact_person') }}
+        <input required name="contact_person" id="contact_person" value="{{ report.contact_person if report else '' }}">
+      </label>
+      <label>
+        {{ t('place') }}
+        <input required name="place" id="place" value="{{ report.place if report else '' }}">
+      </label>
+
+      <label>
+        {{ t('date') }}
+        <input required type="date" name="date_val" value="{{ report.date if report else '' }}">
+      </label>
+      <label>
+        {{ t('classification') }}
+        <select required name="classification">
+          <option value="A" {% if report and report.classification=='A' %}selected{% endif %}>A</option>
+          <option value="B" {% if report and report.classification=='B' %}selected{% endif %}>B</option>
+          <option value="C" {% if report and report.classification=='C' %}selected{% endif %}>C</option>
+        </select>
+      </label>
+      <label>
+        {{ t('order_value_eur') }}
+        <input required type="number" step="0.01" min="0" name="order_value_eur" value="{{ '%.2f'|format(report.order_value_eur) if report else '' }}">
+      </label>
+      <label>
+        {{ t('offer_value_eur') }}
+        <input required type="number" step="0.01" min="0" name="offer_value_eur" value="{{ '%.2f'|format(report.offer_value_eur) if report else '' }}">
+      </label>
+    </div>
+
+    <label>
+      {{ t('short_report') }}
+      <textarea required name="short_report" rows="3">{{ report.short_report if report else '' }}</textarea>
+    </label>
+    <label>
+      {{ t('next_steps') }}
+      <textarea required name="next_steps" rows="3">{{ report.next_steps if report else '' }}</textarea>
+    </label>
+
+    <div class="grid three">
+      <label>
+        {{ t('next_visit_weeks') }}
+        <input required type="number" min="0" max="520" name="next_visit_weeks" value="{{ report.next_visit_weeks if report else '' }}">
+      </label>
+
+      <fieldset>
+        <legend>{{ t('is_new_account') }}</legend>
+        <!-- Pflicht durch required auf erstem Radio; optional machen: required entfernen -->
+        <label><input required type="radio" name="is_new_account" value="yes" {% if report and report.is_new_account %}checked{% endif %}> {{ t('yes') }}</label>
+        <label><input type="radio" name="is_new_account" value="no" {% if report and not report.is_new_account %}checked{% endif %}> {{ t('no') }}</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>{{ t('overnight') }}</legend>
+        <label><input required type="radio" name="overnight" value="yes" {% if report and report.overnight %}checked{% endif %}> {{ t('yes') }}</label>
+        <label><input type="radio" name="overnight" value="no" {% if report and not report.overnight %}checked{% endif %}> {{ t('no') }}</label>
+      </fieldset>
+    </div>
+
+    <fieldset>
+      <legend>{{ t('day_status') }}</legend>
+      <!-- Normalisierte Codes im value; UI-Label abhängig von Sprache -->
+      <label><input required type="radio" name="day_status_ui" value="OFFICE" {% if report and report.day_status=='OFFICE' %}checked{% endif %}> {{ 'B' if locale=='de' else 'O' }} — {{ t('office') }}</label>
+      <label><input type="radio" name="day_status_ui" value="VACATION" {% if report and report.day_status=='VACATION' %}checked{% endif %}> {{ 'U' if locale=='de' else 'V' }} — {{ t('vacation') }}</label>
+      <label><input type="radio" name="day_status_ui" value="ILLNESS" {% if report and report.day_status=='ILLNESS' %}checked{% endif %}> {{ 'K' if locale=='de' else 'I' }} — {{ t('illness') }}</label>
+    </fieldset>
+
+    <div class="row gap">
+      <button class="btn" type="submit">{{ t('save') }}</button>
+      <a class="btn secondary" href="/reports">{{ t('cancel') }}</a>
+    </div>
+  </form>
+
+  <!-- Dropdown für Mehrfachtreffer -->
+  <div id="customerDropdownWrap" class="dropdown hidden">
+    <label>Vorschläge:
+      <select id="customerDropdown"></select>
+    </label>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// === Simple debounce ===
+function debounce(fn, delay) {
+  let t;
+  return function(...args) {
+    clearTimeout(t);
+    t = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
+const fields = ['customer_no','customer_name','contact_person','place'];
+const inputs = Object.fromEntries(fields.map(id => [id, document.getElementById(id)]));
+const dropdownWrap = document.getElementById('customerDropdownWrap');
+const dropdown = document.getElementById('customerDropdown');
+
+function fillFromRecord(rec) {
+  if (!inputs['customer_no'].value) inputs['customer_no'].value = rec.customer_no || '';
+  if (!inputs['customer_name'].value) inputs['customer_name'].value = rec.customer_name || '';
+  if (!inputs['contact_person'].value) inputs['contact_person'].value = rec.contact_person || '';
+  if (!inputs['place'].value) inputs['place'].value = rec.place || '';
+}
+
+function showDropdown(matches) {
+  dropdown.innerHTML = '';
+  matches.forEach((m, idx) => {
+    const opt = document.createElement('option');
+    opt.value = JSON.stringify(m);
+    opt.textContent = `${m.customer_no || ''} — ${m.customer_name || ''} — ${m.contact_person || ''} — ${m.place || ''}`;
+    dropdown.appendChild(opt);
+  });
+  dropdownWrap.classList.remove('hidden');
+}
+
+dropdown.addEventListener('change', () => {
+  try {
+    const rec = JSON.parse(dropdown.value);
+    fillFromRecord(rec);
+  } catch (e) {}
+  dropdownWrap.classList.add('hidden');
+});
+
+async function querySuggest(triggerField) {
+  const params = new URLSearchParams();
+  for (const k of fields) {
+    const v = inputs[k].value.trim();
+    if (v && (k === triggerField || !inputs[triggerField].value)) {
+      params.append(k, v);
+    }
+  }
+  if ([...params.keys()].length === 0) return;
+  const resp = await fetch('/api/customers/suggest?' + params.toString());
+  if (!resp.ok) return;
+  const data = await resp.json();
+  const matches = data.matches || [];
+  if (matches.length === 1) {
+    fillFromRecord(matches[0]);
+    dropdownWrap.classList.add('hidden');
+  } else if (matches.length > 1) {
+    showDropdown(matches);
+  } else {
+    dropdownWrap.classList.add('hidden');
+  }
+}
+
+for (const id of fields) {
+  inputs[id].addEventListener('input', debounce(() => querySuggest(id), 300));
+  inputs[id].addEventListener('blur', () => querySuggest(id));
+}
+</script>
+{% endblock %}

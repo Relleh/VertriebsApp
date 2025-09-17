@@ -1,0 +1,104 @@
+version: "3.9"
+
+# Konfiguration für externe Datenbank (Cloud DB)
+# Keine lokale DB - alles läuft extern für maximale Verfügbarkeit
+
+services:
+  app:
+    build: .
+    environment:
+      # === Microsoft Entra ID ===
+      ENTRA_TENANT_ID: ${ENTRA_TENANT_ID}
+      ENTRA_CLIENT_ID: ${ENTRA_CLIENT_ID}
+      ENTRA_CLIENT_SECRET: ${ENTRA_CLIENT_SECRET}
+      OAUTH_REDIRECT_URI: ${OAUTH_REDIRECT_URI}
+      SESSION_SECRET: ${SESSION_SECRET}
+      
+      # === Externe Datenbank ===
+      DATABASE_URL: postgresql+psycopg2://${EXTERNAL_DB_USER}:${EXTERNAL_DB_PASSWORD}@${EXTERNAL_DB_HOST}:${EXTERNAL_DB_PORT}/${EXTERNAL_DB_NAME}?sslmode=${DB_SSL_MODE:-prefer}
+      
+      # === App Config ===
+      CUSTOMERS_CSV_PATH: ${CUSTOMERS_CSV_PATH:-/app/data/customers.csv}
+      DEFAULT_LOCALE: ${DEFAULT_LOCALE:-de}
+      
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers"]
+    restart: unless-stopped
+    
+    # Health Check für App
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Monitoring Service
+  monitoring:
+    image: postgres:16-alpine
+    depends_on:
+      - app
+    environment:
+      PGPASSWORD: ${EXTERNAL_DB_PASSWORD}
+    volumes:
+      - ./monitoring:/monitoring
+    command: |
+      sh -c "
+      while true; do
+        sleep 300  # Alle 5 Minuten
+        
+        # DB Connection Test
+        if pg_isready -h ${EXTERNAL_DB_HOST} -p ${EXTERNAL_DB_PORT} -U ${EXTERNAL_DB_USER}; then
+          echo '$(date): ✅ Database connection OK' >> /monitoring/health.log
+        else
+          echo '$(date): ❌ Database connection FAILED' >> /monitoring/health.log
+          # Hier könntest du Alerts senden
+          if [ -n '$SLACK_WEBHOOK_URL' ]; then
+            curl -X POST '$SLACK_WEBHOOK_URL' -d '{\"text\":\"🚨 Database connection failed for Vertriebsberichte App!\"}'
+          fi
+        fi
+        
+        # App Health Test  
+        if curl -f http://app:8000/health > /dev/null 2>&1; then
+          echo '$(date): ✅ App health OK' >> /monitoring/health.log
+        else
+          echo '$(date): ❌ App health FAILED' >> /monitoring/health.log
+        fi
+        
+        # Disk Space Check
+        df -h >> /monitoring/disk-usage-$(date +%Y%m%d).log
+        
+        # Cleanup old logs (keep 30 days)
+        find /monitoring -name '*.log' -mtime +30 -delete
+      done
+      "
+    restart: unless-stopped
+
+  # Backup Service (auch bei externer DB wichtig!)
+  backup-service:
+    image: postgres:16-alpine
+    environment:
+      PGPASSWORD: ${EXTERNAL_DB_PASSWORD}
+    volumes:
+      - ./backups:/backups
+      - ./cloud-backup.sh:/cloud-backup.sh:ro
+    command: |
+      sh -c "
+      while true; do
+        sleep 21600  # Alle 6 Stunden
+        
+        echo 'Starting backup...'
+        pg_dump -h ${EXTERNAL_DB_HOST} -p ${EXTERNAL_DB_PORT} -U ${EXTERNAL_DB_USER} ${EXTERNAL_DB_NAME} > /backups/external-backup-$(date +%Y%m%d_%H%M%S).sql
+        
+        # Führe Cloud-Backup-Skript aus
+        if [ -f '/cloud-backup.sh' ]; then
+          bash /cloud-backup.sh
+        fi
+        
+        echo 'Backup completed.'
+      done
+      "
+    restart: unless-stopped

@@ -1,0 +1,52 @@
+version: "3.9"
+
+# Vereinfachte Master-Slave Replikation
+services:
+  db-master:
+    image: postgres:16-alpine
+    container_name: postgres-master
+    environment:
+      POSTGRES_DB: vertrieb
+      POSTGRES_USER: vertrieb
+      POSTGRES_PASSWORD: vertrieb
+      POSTGRES_INITDB_ARGS: "--auth-host=md5"
+    volumes:
+      - db_master_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    command: |
+      postgres 
+      -c wal_level=replica 
+      -c max_wal_senders=3 
+      -c max_replication_slots=3 
+      -c hot_standby=on
+      -c listen_addresses='*'
+      -c shared_preload_libraries=''
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vertrieb -d vertrieb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    depends_on:
+      db-master:
+        condition: service_healthy
+    environment:
+      ENTRA_TENANT_ID: ${ENTRA_TENANT_ID}
+      ENTRA_CLIENT_ID: ${ENTRA_CLIENT_ID}
+      ENTRA_CLIENT_SECRET: ${ENTRA_CLIENT_SECRET}
+      OAUTH_REDIRECT_URI: ${OAUTH_REDIRECT_URI}
+      SESSION_SECRET: ${SESSION_SECRET}
+      DATABASE_URL: postgresql+psycopg2://vertrieb:vertrieb@db-master:5432/vertrieb
+      CUSTOMERS_CSV_PATH: ${CUSTOMERS_CSV_PATH}
+      DEFAULT_LOCALE: ${DEFAULT_LOCALE}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers"]
+
+volumes:
+  db_master_data:

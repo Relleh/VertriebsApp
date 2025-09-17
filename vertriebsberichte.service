@@ -1,0 +1,20 @@
+[Unit]
+Description=Vertriebsberichte FastAPI Application
+After=network-online.target snap.docker.dockerd.service
+Wants=network-online.target
+Requires=snap.docker.dockerd.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/home/user/vertriebsberichte-app-original
+ExecStart=/home/user/vertriebsberichte-app-original/start-app.sh
+ExecStop=/home/user/vertriebsberichte-app-original/stop-app.sh
+TimeoutStartSec=300
+StandardOutput=journal
+StandardError=journal
+User=user
+Group=user
+
+[Install]
+WantedBy=default.target

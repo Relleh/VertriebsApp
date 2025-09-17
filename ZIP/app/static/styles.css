@@ -1,0 +1,28 @@
+:root { --fg:#222; --bg:#fff; --muted:#666; --brand:#2d6cdf; --brand-2:#e8f0fe; --border:#e6e6e6; }
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji','Segoe UI Emoji', 'Segoe UI Symbol'; color: var(--fg); background: var(--bg); }
+.container { max-width: 1100px; margin: 0 auto; padding: 1rem; }
+.row { display:flex; align-items:center; }
+.space-between { justify-content: space-between; }
+.gap { gap: .75rem; }
+.align-center { align-items: center; }
+.topbar { background: var(--brand-2); border-bottom: 1px solid var(--border); }
+.topbar .brand { font-weight: 700; color: var(--brand); }
+.topbar a { text-decoration: none; color: var(--fg); padding: .5rem .75rem; border-radius: .375rem; }
+.topbar a.active { background: var(--brand); color: white; }
+.btn { display:inline-block; padding: .6rem .9rem; border-radius: .5rem; background: var(--brand); color:white; text-decoration:none; border: 1px solid var(--brand); }
+.btn.secondary { background: transparent; color: var(--brand); }
+.btn.small { padding: .35rem .6rem; font-size: .9rem; }
+.hero { padding: 3rem 0; text-align:center; }
+.grid { display:grid; gap:1rem; }
+.grid.two { grid-template-columns: repeat(2, minmax(0,1fr)); }
+.grid.three { grid-template-columns: repeat(3, minmax(0,1fr)); }
+label { display:block; font-size:.95rem; }
+label input, label textarea, label select { width:100%; padding:.55rem .6rem; border:1px solid var(--border); border-radius:.4rem; margin-top:.35rem; font: inherit; }
+fieldset { border:1px solid var(--border); border-radius:.5rem; padding:.6rem .8rem; }
+legend { padding: 0 .25rem; color: var(--muted); font-size:.9rem; }
+.table-wrap { overflow:auto; border:1px solid var(--border); border-radius:.5rem; }
+table { width:100%; border-collapse: collapse; }
+th, td { padding:.55rem .6rem; border-bottom:1px solid var(--border); text-align:left; }
+.dropdown { margin-top:1rem; }
+.hidden { display:none; }

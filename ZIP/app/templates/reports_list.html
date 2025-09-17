@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="row space-between align-center">
+    <h2>{{ t('my_reports') }}</h2>
+    <div class="row gap">
+      <a class="btn" href="/reports/new">{{ t('new_report') }}</a>
+      <a class="btn secondary" href="/admin/reload-customers">{{ t('reload_customers') }}</a>
+    </div>
+  </div>
+
+  {% if not reports %}
+    <p>{{ t('no_reports') }}</p>
+  {% else %}
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>{{ t('date') }}</th>
+          <th>{{ t('customer_no') }}</th>
+          <th>{{ t('customer_name') }}</th>
+          <th>{{ t('contact_person') }}</th>
+          <th>{{ t('place') }}</th>
+          <th>{{ t('classification') }}</th>
+          <th>{{ t('order_value_eur') }}</th>
+          <th>{{ t('offer_value_eur') }}</th>
+          <th>{{ t('actions') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in reports %}
+        <tr>
+          <td>{{ r.id }}</td>
+          <td>{{ r.date }}</td>
+          <td>{{ r.customer_no }}</td>
+          <td>{{ r.customer_name }}</td>
+          <td>{{ r.contact_person }}</td>
+          <td>{{ r.place }}</td>
+          <td>{{ r.classification }}</td>
+          <td>{{ '%.2f'|format(r.order_value_eur) }}</td>
+          <td>{{ '%.2f'|format(r.offer_value_eur) }}</td>
+          <td><a class="btn small" href="/reports/{{ r.id }}/edit">{{ t('edit') }}</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+{% endblock %}

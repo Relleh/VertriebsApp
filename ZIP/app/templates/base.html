@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="{{ 'de' if locale == 'de' else 'en' }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{{ t('app_title') }}</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container row space-between">
+        <div class="brand">{{ t('app_title') }}</div>
+        <nav class="row gap">
+          <a href="/set-locale?lang=de" class="{{ 'active' if locale=='de' else '' }}">{{ t('lang_de') }}</a>
+          <a href="/set-locale?lang=en" class="{{ 'active' if locale=='en' else '' }}">{{ t('lang_en') }}</a>
+          {% if user %}
+            <a href="/reports">{{ t('my_reports') }}</a>
+            <a href="/logout">{{ t('logout') }}</a>
+          {% else %}
+            <a href="/login">{{ t('login') }}</a>
+          {% endif %}
+        </nav>
+      </div>
+    </header>
+    <main class="container">
+      {% block content %}{% endblock %}
+    </main>
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

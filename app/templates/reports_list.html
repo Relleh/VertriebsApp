@@ -1,0 +1,242 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="row space-between align-center">
+    <h2>{{ t('my_reports') }}</h2>
+    <div class="row gap">
+      <a class="btn" href="/reports/new">{{ t('new_report') }}</a>
+    </div>
+  </div>
+
+  <!-- Search and Sort Controls -->
+  <div class="controls-row" style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 0.5rem;">
+    <div style="flex: 1;">
+      <input type="text" id="searchInput" placeholder="Berichte durchsuchen..." value="{{ current_search if current_search else '' }}" 
+             style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 0.25rem;" 
+             onkeyup="performSearch()">
+    </div>
+    <div style="display: flex; gap: 0.5rem; align-items: center;">
+      <label style="font-weight: 500;">Sortieren nach:</label>
+      <select id="sortSelect" onchange="updateSort()" style="padding: 0.5rem; border: 1px solid #ddd; border-radius: 0.25rem;">
+        <option value="date" {{ 'selected' if current_sort == 'date' else '' }}>Datum</option>
+        <option value="customer" {{ 'selected' if current_sort == 'customer' else '' }}>Kunde</option>
+      </select>
+      <button onclick="toggleOrder()" style="padding: 0.5rem 1rem; border: 1px solid #ddd; border-radius: 0.25rem; background: white; cursor: pointer;" 
+              title="{{ 'Älteste zuerst' if current_order == 'desc' else 'Neueste zuerst' }}">
+        {{ '▲' if current_order == 'desc' else '▼' }}
+      </button>
+    </div>
+  </div>
+
+  {% if not reports %}
+    <p>{{ t('no_reports') }}</p>
+  {% else %}
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>{{ t('date') }}</th>
+          <th>{{ t('customer_no') }}</th>
+          <th>{{ t('customer_name') }}</th>
+          <th>{{ t('contact_person') }}</th>
+          <th>{{ t('place') }}</th>
+          <th>{{ t('classification') }}</th>
+          <th>{{ t('order_value_eur') }}</th>
+          <th>{{ t('offer_value_eur') }}</th>
+          <th>{{ t('actions') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in reports %}
+        <tr>
+          <td>{{ r.date }}</td>
+          <td>{{ r.customer_no }}</td>
+          <td>{{ r.customer_name }}</td>
+          <td>{{ r.contact_person }}</td>
+          <td>{{ r.place }}</td>
+          <td>{{ r.classification }}</td>
+          <td>{{ '%.2f'|format(r.order_value_eur) }}</td>
+          <td>{{ '%.2f'|format(r.offer_value_eur) }}</td>
+          <td><a class="btn small" href="/reports/{{ r.id }}/edit">{{ t('edit') }}</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+{% endblock %}
+
+{% block scripts %}
+<!-- Fireworks.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.x/dist/index.umd.js"></script>
+
+<script>
+// Search and Sort functionality
+let searchTimeout;
+
+function performSearch() {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    const searchTerm = document.getElementById('searchInput').value;
+    const sortBy = document.getElementById('sortSelect').value;
+    const currentOrder = '{{ current_order }}';
+    
+    const params = new URLSearchParams();
+    if (searchTerm.trim()) params.set('search', searchTerm);
+    if (sortBy) params.set('sort', sortBy);
+    if (currentOrder) params.set('order', currentOrder);
+    
+    const newUrl = '/reports' + (params.toString() ? '?' + params.toString() : '');
+    window.location.href = newUrl;
+  }, 500); // 500ms delay for better UX
+}
+
+function updateSort() {
+  const sortBy = document.getElementById('sortSelect').value;
+  const currentOrder = '{{ current_order }}';
+  const searchTerm = document.getElementById('searchInput').value;
+  
+  const params = new URLSearchParams();
+  if (searchTerm.trim()) params.set('search', searchTerm);
+  params.set('sort', sortBy);
+  params.set('order', currentOrder);
+  
+  const newUrl = '/reports?' + params.toString();
+  window.location.href = newUrl;
+}
+
+function toggleOrder() {
+  const sortBy = document.getElementById('sortSelect').value;
+  const currentOrder = '{{ current_order }}';
+  const newOrder = currentOrder === 'desc' ? 'asc' : 'desc';
+  const searchTerm = document.getElementById('searchInput').value;
+  
+  const params = new URLSearchParams();
+  if (searchTerm.trim()) params.set('search', searchTerm);
+  params.set('sort', sortBy);
+  params.set('order', newOrder);
+  
+  const newUrl = '/reports?' + params.toString();
+  window.location.href = newUrl;
+}
+
+// Allow Enter key to trigger search immediately
+document.getElementById('searchInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    clearTimeout(searchTimeout);
+    performSearch();
+  }
+});
+
+</script>
+
+<script>
+// Fireworks animation for successful save
+function createFireworks() {
+  // Create container for fireworks
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+  `;
+  document.body.appendChild(container);
+  
+  // Initialize fireworks
+  const fireworks = new Fireworks.default(container, {
+    autoresize: true,
+    opacity: 0.5,
+    acceleration: 1.05,
+    friction: 0.97,
+    gravity: 1.5,
+    particles: 50,
+    traceLength: 3,
+    traceSpeed: 10,
+    explosion: 5,
+    intensity: 30,
+    flickering: 50,
+    lineStyle: 'round',
+    hue: {
+      min: 0,
+      max: 360
+    },
+    delay: {
+      min: 30,
+      max: 60
+    },
+    rocketsPoint: {
+      min: 50,
+      max: 50
+    },
+    lineWidth: {
+      explosion: {
+        min: 1,
+        max: 3
+      },
+      trace: {
+        min: 1,
+        max: 2
+      }
+    },
+    brightness: {
+      min: 50,
+      max: 80
+    },
+    decay: {
+      min: 0.015,
+      max: 0.03
+    },
+    mouse: {
+      click: false,
+      move: false,
+      max: 1
+    }
+  });
+  
+  // Start the show!
+  fireworks.start();
+  
+  // Smooth ending: reduce intensity gradually
+  setTimeout(() => {
+    // Reduce new fireworks intensity
+    fireworks.updateOptions({ intensity: 10 });
+    
+    setTimeout(() => {
+      // Stop launching new fireworks
+      fireworks.stop();
+      
+      // Fade out container while particles finish
+      container.style.transition = 'opacity 1.5s ease-out';
+      container.style.opacity = '0';
+      
+      // Remove after fade complete
+      setTimeout(() => {
+        container.remove();
+      }, 1500);
+    }, 1000);
+  }, 2500);
+}
+
+// Check if report was saved successfully
+document.addEventListener('DOMContentLoaded', function() {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('saved') === 'true') {
+    // Check if Fun Mode is enabled
+    const isFunMode = localStorage.getItem('funMode') === 'true';
+    
+    if (isFunMode) {
+      // Trigger fireworks animation only in Fun Mode
+      setTimeout(createFireworks, 300);
+    }
+    
+    // Clean up URL without page reload
+    const url = new URL(window.location);
+    url.searchParams.delete('saved');
+    window.history.replaceState({}, document.title, url.pathname + url.search);
+  }
+});
+</script>
+{% endblock %}

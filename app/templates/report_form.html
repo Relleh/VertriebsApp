@@ -1,0 +1,910 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>{{ t('new_report') if not report else t('edit_report') }}</h2>
+  
+  {% if errors %}
+  <div class="alert alert-danger" style="background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 1rem; border-radius: 0.25rem; margin-bottom: 1rem;">
+    <strong>Fehler bei der Validierung:</strong>
+    <ul style="margin-top: 0.5rem; margin-bottom: 0;">
+      {% for error in errors %}
+        <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+  
+  <!-- Multi-Match Selection Modal -->
+  <div id="multiMatchModal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>{{ t('multiple_matches_found') if t('multiple_matches_found') != 'multiple_matches_found' else 'Mehrere Treffer gefunden' }}</h3>
+        <button class="modal-close" onclick="closeMultiMatchModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>{{ t('select_customer') if t('select_customer') != 'select_customer' else 'Bitte wählen Sie den gewünschten Kunden:' }}</p>
+        <div class="customer-list" id="customerList"></div>
+      </div>
+    </div>
+  </div>
+
+  <form method="post" action="{{ action }}" id="reportForm">
+    <div class="form-section">
+      <h3>{{ t('customer_data') }}</h3>
+      <div class="grid two">
+        <label>
+          {{ t('customer_no') }}
+          <div class="autocomplete-container">
+            <input required name="customer_no" id="customer_no" value="{{ form_data.customer_no if form_data else (report.customer_no if report else '') }}" autocomplete="off">
+          </div>
+        </label>
+        <label>
+          {{ t('customer_name') }}
+          <div class="autocomplete-container">
+            <input required name="customer_name" id="customer_name" value="{{ report.customer_name if report else '' }}" autocomplete="off">
+          </div>
+        </label>
+        <label>
+          {{ t('contact_person') }}
+          <input required name="contact_person" id="contact_person" value="{{ report.contact_person if report else '' }}">
+        </label>
+        <label>
+          {{ t('place') }}
+          <div class="autocomplete-container">
+            <input required name="place" id="place" value="{{ report.place if report else '' }}" autocomplete="off">
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>{{ t('visit_details') }}</h3>
+      <div class="grid two">
+        <label>
+          {{ t('date') }}
+          <input required type="date" name="date_val" value="{{ report.date if report else '' }}" max="{{ today }}" title="Datum darf nicht in der Zukunft liegen">
+        </label>
+        <label>
+          {{ t('classification') }}
+          <select required name="classification" id="classification">
+            <option value="">{{ t('please_select') }}</option>
+            <option value="A" {% if report and report.classification=='A' %}selected{% endif %}>A</option>
+            <option value="B" {% if report and report.classification=='B' %}selected{% endif %}>B</option>
+            <option value="C" {% if report and report.classification=='C' %}selected{% endif %}>C</option>
+          </select>
+        </label>
+        <label>
+          {{ t('order_value_eur') }}
+          <input type="number" step="0.01" min="0" name="order_value_eur" value="{{ '%.2f'|format(report.order_value_eur) if report else '0.00' }}" placeholder="0.00">
+        </label>
+        <label>
+          {{ t('offer_value_eur') }}
+          <input type="number" step="0.01" min="0" name="offer_value_eur" value="{{ '%.2f'|format(report.offer_value_eur) if report else '0.00' }}" placeholder="0.00">
+        </label>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>{{ t('report_section') }}</h3>
+      <div class="grid two">
+        <label>
+          {{ t('short_report') }}
+          <textarea required name="short_report" rows="3" minlength="1" title="{{ 'Mindestens ein Buchstabe erforderlich' if locale=='de' else 'At least one letter required' }}">{{ report.short_report if report else '' }}</textarea>
+        </label>
+        <label>
+          {{ t('next_steps') }}
+          <textarea required name="next_steps" rows="3" minlength="1" title="{{ 'Mindestens ein Buchstabe erforderlich' if locale=='de' else 'At least one letter required' }}">{{ report.next_steps if report else '' }}</textarea>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>{{ t('additional_info') }}</h3>
+      <div class="grid three">
+        <label>
+          {{ t('next_visit_weeks') }}
+          <input required type="number" min="0" max="520" name="next_visit_weeks" value="{{ report.next_visit_weeks if report else '' }}">
+        </label>
+        
+        <label>
+          {{ t('is_new_account') }}
+          <select required name="is_new_account" id="is_new_account">
+            <option value="">{{ t('please_select') }}</option>
+            <option value="yes" {% if report and report.is_new_account %}selected{% endif %}>{{ t('yes') }}</option>
+            <option value="no" {% if report and not report.is_new_account %}selected{% endif %}>{{ t('no') }}</option>
+          </select>
+        </label>
+        
+        <label>
+          {{ t('overnight') }}
+          <select required name="overnight">
+            <option value="">{{ t('please_select') }}</option>
+            <option value="yes" {% if report and report.overnight %}selected{% endif %}>{{ t('yes') }}</option>
+            <option value="no" {% if report and not report.overnight %}selected{% endif %}>{{ t('no') }}</option>
+          </select>
+        </label>
+      </div>
+      
+      <label>
+        {{ 'Unterwegs/Bürotag/Verhindert' if locale=='de' else 'Mobile/Office Day/Prevented' }}
+        <select required name="day_status_ui">
+          <option value="MOBILE" {% if not report or report.day_status=='MOBILE' %}selected{% endif %}>{{ 'Unterwegs' if locale=='de' else 'Mobile' }}</option>
+          <option value="OFFICE" {% if report and report.day_status=='OFFICE' %}selected{% endif %}>{{ 'Bürotag' if locale=='de' else 'Office Day' }}</option>
+          <option value="PREVENTED" {% if report and report.day_status=='PREVENTED' %}selected{% endif %}>{{ 'Verhindert' if locale=='de' else 'Prevented' }}</option>
+        </select>
+      </label>
+    </div>
+
+    <!-- Neue Felder: Vorgestellte Produkte -->
+    <div class="form-section">
+      <h3>{{ 'Vorgestellte Produkte' if locale=='de' else 'Products presented' }}</h3>
+      <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+        <label class="checkbox-label">
+          <input type="checkbox" name="presented_new_products" value="true" {% if report and report.presented_new_products %}checked{% endif %}>
+          <span>{{ 'Neuprodukte' if locale=='de' else 'New products' }}</span>
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" name="presented_diamond" value="true" {% if report and report.presented_diamond %}checked{% endif %}>
+          <span>{{ 'Diamant' if locale=='de' else 'Diamond' }}</span>
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" name="presented_abrasive_backing" value="true" {% if report and report.presented_abrasive_backing %}checked{% endif %}>
+          <span>{{ 'Schleifmittel auf Unterlage' if locale=='de' else 'Abrasive on backing' }}</span>
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" name="presented_cutting_discs" value="true" {% if report and report.presented_cutting_discs %}checked{% endif %}>
+          <span>{{ 'Trennscheiben' if locale=='de' else 'Cutting discs' }}</span>
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" name="presented_current_promotion" value="true" {% if report and report.presented_current_promotion %}checked{% endif %}>
+          <span>{{ 'Aktuelle Promotion' if locale=='de' else 'Current promotion' }}</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Angebot abgegeben -->
+    <div class="form-section">
+      <h3>{{ 'Angebot' if locale=='de' else 'Offer' }}</h3>
+      <div class="grid two">
+        <label>
+          {{ 'Angebot abgegeben (J/N)' if locale=='de' else 'Offer submitted (Y/N)' }}
+          <select name="offer_submitted" id="offer_submitted_select">
+            <option value="">{{ 'Bitte wählen' if locale=='de' else 'Please select' }}</option>
+            <option value="yes" {% if report and report.offer_submitted %}selected{% endif %}>{{ 'Ja' if locale=='de' else 'Yes' }}</option>
+            <option value="no" {% if report and report.offer_submitted == false %}selected{% endif %}>{{ 'Nein' if locale=='de' else 'No' }}</option>
+          </select>
+        </label>
+
+        <label id="offer_amount_label" style="{% if not (report and report.offer_submitted) %}display: none;{% endif %}">
+          {{ 'Angebotswert (EUR)' if locale=='de' else 'Offer amount (EUR)' }}
+          <input type="number" step="0.01" min="0.01" name="offer_amount_eur" id="offer_amount_input"
+                 value="{{ '%.2f'|format(report.offer_amount_eur) if report and report.offer_amount_eur else '' }}"
+                 placeholder="0.00">
+        </label>
+      </div>
+    </div>
+
+    <div class="row gap">
+      <button class="btn" type="submit">{{ t('save') }}</button>
+      <a class="btn secondary" href="/reports">{{ t('cancel') }}</a>
+    </div>
+  </form>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Enhanced Customer Autocomplete System with Field State Management
+// DYNAMIC Cache Buster - Forces fresh load every time
+const cacheBuster = 'v' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+console.log('🔄 CACHE BUSTER:', cacheBuster, '- Loading at', new Date().toISOString());
+
+// Debounce utility
+function debounce(fn, delay) {
+  let timer;
+  return function(...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
+// State management
+const fieldState = {
+  customer_no: { manuallyEdited: false, lastAutoValue: '' },
+  customer_name: { manuallyEdited: false, lastAutoValue: '' },
+  contact_person: { manuallyEdited: false, lastAutoValue: '' },
+  place: { manuallyEdited: false, lastAutoValue: '' }
+};
+
+// These will be initialized when DOM is ready
+let inputs = {};
+let dropdowns = {};
+
+// Tab state management for smooth dropdown interaction
+const tabState = {
+  customer_no: { pendingTab: false },
+  customer_name: { pendingTab: false },
+  place: { pendingTab: false }
+};
+
+// Track manual edits to prevent auto-overwriting
+function trackManualEdit(fieldName) {
+  const currentValue = inputs[fieldName].value;
+  const lastAutoValue = fieldState[fieldName].lastAutoValue;
+
+  // Only mark as manually edited if:
+  // 1. Value is different from last auto-filled value
+  // 2. Value is not empty
+  // 3. User has typed at least 3 characters (to avoid marking single keystrokes)
+  if (currentValue !== lastAutoValue && currentValue.length >= 3) {
+    fieldState[fieldName].manuallyEdited = true;
+  } else if (currentValue === '') {
+    // Reset state if field is cleared
+    fieldState[fieldName].manuallyEdited = false;
+    fieldState[fieldName].lastAutoValue = '';
+  }
+}
+
+// Reset field state for a fresh start
+function resetFieldState(fieldName) {
+  if (fieldState[fieldName]) {
+    fieldState[fieldName].manuallyEdited = false;
+    fieldState[fieldName].lastAutoValue = '';
+  }
+}
+
+// Helper function to focus the next field in tab order
+function focusNextField(currentInput) {
+  const form = currentInput.closest('form');
+  if (!form) return;
+
+  const focusableElements = form.querySelectorAll(
+    'input:not([disabled]):not([readonly]), select:not([disabled]), textarea:not([disabled]), button:not([disabled])'
+  );
+
+  const currentIndex = Array.from(focusableElements).indexOf(currentInput);
+  const nextIndex = currentIndex + 1;
+
+  if (nextIndex < focusableElements.length) {
+    focusableElements[nextIndex].focus();
+    console.log('🎯 Focused next field:', focusableElements[nextIndex].name || focusableElements[nextIndex].id);
+  }
+}
+
+// Smart fill logic - respects manual edits
+function smartFillFromRecord(record, triggerField) {
+  Object.keys(inputs).forEach(field => {
+    const input = inputs[field];
+    const state = fieldState[field];
+    const newValue = record[field] || '';
+    
+    // Only fill if:
+    // 1. Field is empty, OR
+    // 2. Field hasn't been manually edited, OR  
+    // 3. This is the field that triggered the search
+    if (!input.value || !state.manuallyEdited || field === triggerField) {
+      input.value = newValue;
+      state.lastAutoValue = newValue;
+      state.manuallyEdited = false;
+    }
+  });
+  
+  // Also fill ABC classification and new customer status if available
+  if (record.abc_classification !== undefined) {
+    const classificationSelect = document.getElementById('classification');
+    if (classificationSelect && record.abc_classification) {
+      classificationSelect.value = record.abc_classification;
+    }
+  }
+  
+  if (record.is_new_customer !== undefined) {
+    const newAccountSelect = document.getElementById('is_new_account');
+    if (newAccountSelect) {
+      newAccountSelect.value = record.is_new_customer ? 'yes' : 'no';
+    }
+  }
+}
+
+// Individual autocomplete suggestion fetcher
+async function fetchSuggestions(field, query) {
+  if (!query.trim()) return [];
+  
+  try {
+    const endpoints = {
+      customer_no: '/api/suggestions/customer-no',
+      customer_name: '/api/suggestions/customer-name', 
+      place: '/api/suggestions/place'
+    };
+    
+    const url = `${endpoints[field]}?q=${encodeURIComponent(query)}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    return data.suggestions || [];
+  } catch (error) {
+    console.error('Error fetching suggestions:', error);
+    return [];
+  }
+}
+
+// Position dropdown portal relative to input (fixed positioning)
+function positionDropdown(inputElement, dropdown) {
+  const rect = inputElement.getBoundingClientRect();
+  
+  // Use fixed positioning relative to viewport
+  dropdown.style.left = rect.left + 'px';
+  dropdown.style.top = (rect.bottom + 2) + 'px';
+  dropdown.style.width = rect.width + 'px';
+}
+
+// Show autocomplete dropdown
+function showAutocompleteDropdown(field, suggestions) {
+  const dropdown = dropdowns[field];
+  const input = inputs[field];
+  if (!dropdown || !input) return;
+  
+  dropdown.innerHTML = '';
+  
+  if (suggestions.length === 0) {
+    dropdown.classList.add('hidden');
+    return;
+  }
+  
+  suggestions.forEach(suggestion => {
+    const item = document.createElement('div');
+    item.className = 'autocomplete-item';
+    item.textContent = suggestion;
+    // Use mousedown instead of click to prevent blur race condition
+    item.addEventListener('mousedown', (e) => {
+      e.preventDefault(); // Prevent blur
+      inputs[field].value = suggestion;
+      fieldState[field].lastAutoValue = suggestion;
+      fieldState[field].manuallyEdited = false;
+      dropdown.classList.add('hidden');
+
+      // Trigger customer lookup for this selection
+      findCustomersByField(field, suggestion);
+    });
+    dropdown.appendChild(item);
+  });
+  
+  // Position dropdown correctly with fixed positioning
+  positionDropdown(input, dropdown);
+  dropdown.classList.remove('hidden');
+}
+
+// Find customers by specific field and handle multi-match
+async function findCustomersByField(field, value) {
+  if (!value.trim()) return;
+  
+  try {
+    const response = await fetch(`/api/customers/find-by-field?field=${field}&value=${encodeURIComponent(value)}`);
+    const data = await response.json();
+    const matches = data.matches || [];
+    
+    if (matches.length === 1) {
+      // Single match - auto fill
+      smartFillFromRecord(matches[0], field);
+    } else if (matches.length > 1) {
+      // Multiple matches - show modal
+      showMultiMatchModal(matches);
+    } else if (matches.length === 0 && field === 'customer_no') {
+      // If no match found but we have a customer number, still try to get ABC data
+      fetchABCData(value);
+    }
+  } catch (error) {
+    console.error('Error finding customers:', error);
+  }
+}
+
+// Fetch ABC data for a customer number
+async function fetchABCData(customerNo) {
+  if (!customerNo.trim()) return;
+  
+  try {
+    const response = await fetch(`/api/customers/abc-data?customer_no=${encodeURIComponent(customerNo)}`);
+    const data = await response.json();
+    
+    if (data.abc_classification) {
+      const classificationSelect = document.getElementById('classification');
+      if (classificationSelect) {
+        classificationSelect.value = data.abc_classification;
+      }
+    }
+    
+    if (data.is_new_customer !== undefined) {
+      const newAccountSelect = document.getElementById('is_new_account');
+      if (newAccountSelect) {
+        newAccountSelect.value = data.is_new_customer ? 'yes' : 'no';
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching ABC data:', error);
+  }
+}
+
+// Multi-match modal functions
+function showMultiMatchModal(matches) {
+  const modal = document.getElementById('multiMatchModal');
+  const customerList = document.getElementById('customerList');
+  
+  customerList.innerHTML = '';
+  
+  matches.forEach(customer => {
+    const item = document.createElement('div');
+    item.className = 'customer-item';
+    item.innerHTML = `
+      <div class="customer-info">
+        <strong>${customer.customer_no}</strong> - ${customer.customer_name}
+        <br><small>${customer.contact_person} | ${customer.place}</small>
+      </div>
+    `;
+    
+    item.addEventListener('click', () => {
+      smartFillFromRecord(customer, null);
+      closeMultiMatchModal();
+    });
+    
+    customerList.appendChild(item);
+  });
+  
+  modal.classList.remove('hidden');
+}
+
+function closeMultiMatchModal() {
+  document.getElementById('multiMatchModal').classList.add('hidden');
+}
+
+// Hide dropdowns when clicking outside
+function hideAllDropdowns() {
+  Object.values(dropdowns).forEach(dropdown => {
+    if (dropdown) dropdown.classList.add('hidden');
+  });
+}
+
+// Event listeners setup
+function setupEventListeners() {
+  // Autocomplete fields
+  ['customer_no', 'customer_name', 'place'].forEach(field => {
+    const input = inputs[field];
+    const dropdown = dropdowns[field];
+
+    if (!input || !dropdown) return;
+
+    let isSelectingFromDropdown = false;
+
+    // Input event for suggestions
+    input.addEventListener('input', debounce(async (e) => {
+      const query = e.target.value;
+      // Only track manual edit if not programmatically set
+      if (!e.isTrusted) return; // Skip if event was triggered programmatically
+
+      trackManualEdit(field);
+
+      if (query.length >= 2) {
+        const suggestions = await fetchSuggestions(field, query);
+        showAutocompleteDropdown(field, suggestions);
+      } else {
+        dropdown.classList.add('hidden');
+      }
+    }, 300));
+
+    // Enter key for immediate lookup
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const value = input.value.trim();
+        if (value && value.length >= 2) {
+          dropdown.classList.add('hidden');
+          findCustomersByField(field, value);
+        }
+      } else if (e.key === 'Tab') {
+        const value = input.value.trim();
+
+        // Special handling for 'place' field - smart tab behavior
+        if (field === 'place' && value && value.length >= 2) {
+          if (!tabState[field].pendingTab) {
+            // First Tab: Show dropdown, prevent normal tab behavior
+            e.preventDefault();
+            tabState[field].pendingTab = true;
+
+            // Show suggestions dropdown
+            fetchSuggestions(field, value).then(suggestions => {
+              if (suggestions.length > 0) {
+                showAutocompleteDropdown(field, suggestions);
+                console.log('🔍 Place dropdown opened - press Tab again to continue');
+              } else {
+                // No suggestions, allow normal tab
+                tabState[field].pendingTab = false;
+                // Focus next field manually
+                focusNextField(input);
+              }
+            });
+          } else {
+            // Second Tab: Close dropdown, allow normal tab behavior
+            tabState[field].pendingTab = false;
+            dropdown.classList.add('hidden');
+            // Don't prevent default - allow normal tab
+            console.log('➡️ Continuing to next field');
+
+            // Also trigger lookup if value was meaningful
+            if (value.length >= 3) {
+              findCustomersByField(field, value);
+            }
+          }
+        } else {
+          // Normal tab behavior for other fields
+          if (value && value.length >= 2) {
+            dropdown.classList.add('hidden');
+            findCustomersByField(field, value);
+          }
+        }
+      }
+    });
+
+    // Blur event - simpler, no debounce
+    input.addEventListener('blur', () => {
+      // Reset tab state when leaving field (to avoid confusion)
+      if (tabState[field]) {
+        tabState[field].pendingTab = false;
+      }
+
+      // Small delay to allow dropdown clicks to register
+      setTimeout(() => {
+        if (!isSelectingFromDropdown) {
+          dropdown.classList.add('hidden');
+          const value = input.value.trim();
+          // Only lookup if we have a meaningful value and field wasn't already processed
+          if (value && value.length >= 3 && fieldState[field].lastAutoValue !== value) {
+            findCustomersByField(field, value);
+          }
+        }
+        isSelectingFromDropdown = false;
+      }, 150);
+    });
+
+    // Mousedown on dropdown to prevent blur
+    dropdown.addEventListener('mousedown', () => {
+      isSelectingFromDropdown = true;
+    });
+
+    // Focus event to show recent suggestions
+    input.addEventListener('focus', async () => {
+      const query = input.value;
+      if (query.length >= 2) {
+        const suggestions = await fetchSuggestions(field, query);
+        showAutocompleteDropdown(field, suggestions);
+      }
+    });
+  });
+  
+  // Track manual edits for contact_person 
+  inputs.contact_person.addEventListener('input', () => {
+    trackManualEdit('contact_person');
+  });
+  
+  // Global click handler to close dropdowns
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.autocomplete-container')) {
+      hideAllDropdowns();
+    }
+  });
+  
+  // Modal close on background click
+  document.getElementById('multiMatchModal').addEventListener('click', (e) => {
+    if (e.target.id === 'multiMatchModal') {
+      closeMultiMatchModal();
+    }
+  });
+}
+
+// Form validation
+function validateForm(event) {
+  const form = document.getElementById('reportForm');
+  const shortReport = form.querySelector('[name="short_report"]').value;
+  const nextSteps = form.querySelector('[name="next_steps"]').value;
+  
+  // Check for whitespace-only values
+  if (!shortReport.trim()) {
+    alert('Kurzbericht darf nicht leer sein');
+    event.preventDefault();
+    return false;
+  }
+  
+  if (!nextSteps.trim()) {
+    alert('Nächste Schritte dürfen nicht leer sein');
+    event.preventDefault();
+    return false;
+  }
+  
+  // Date validation
+  const dateInput = form.querySelector('[name="date_val"]');
+  if (dateInput.value) {
+    const selectedDate = new Date(dateInput.value);
+    const today = new Date();
+    today.setHours(23, 59, 59, 999); // End of today
+    
+    if (selectedDate > today) {
+      alert('Datum darf nicht in der Zukunft liegen');
+      event.preventDefault();
+      return false;
+    }
+  }
+  
+  return true;
+}
+
+// Handle scroll events to reposition visible dropdowns
+function handleScroll() {
+  Object.keys(dropdowns).forEach(field => {
+    const dropdown = dropdowns[field];
+    const input = inputs[field];
+    if (dropdown && input && !dropdown.classList.contains('hidden')) {
+      positionDropdown(input, dropdown);
+    }
+  });
+}
+
+// Handle window resize to reposition visible dropdowns  
+function handleResize() {
+  Object.keys(dropdowns).forEach(field => {
+    const dropdown = dropdowns[field];
+    const input = inputs[field];
+    if (dropdown && input && !dropdown.classList.contains('hidden')) {
+      positionDropdown(input, dropdown);
+    }
+  });
+}
+
+// Hide dropdowns when scrolling (alternative approach)
+function hideDropdownsOnScroll() {
+  Object.values(dropdowns).forEach(dropdown => {
+    if (dropdown) dropdown.classList.add('hidden');
+  });
+}
+
+// Create dropdown portals dynamically in body
+function createDropdownPortal(fieldName) {
+  const dropdown = document.createElement('div');
+  dropdown.className = 'autocomplete-dropdown hidden';
+  dropdown.id = fieldName + '_dropdown';
+  dropdown.style.position = 'fixed';
+  dropdown.style.zIndex = '999999';
+  dropdown.style.background = 'white';
+  dropdown.style.border = '1px solid #e6e6e6';
+  dropdown.style.borderRadius = '0.4rem';
+  dropdown.style.maxHeight = '200px';
+  dropdown.style.overflowY = 'auto';
+  dropdown.style.boxShadow = '0 8px 32px rgba(0,0,0,0.3)';
+  dropdown.style.minWidth = '200px';
+  
+  document.body.appendChild(dropdown);
+  return dropdown;
+}
+
+// Initialize dropdown portals
+function initializeDropdowns() {
+  dropdowns = {
+    customer_no: createDropdownPortal('customer_no'),
+    customer_name: createDropdownPortal('customer_name'),  
+    place: createDropdownPortal('place')
+  };
+}
+
+// Initialize inputs when DOM is ready
+function initializeInputs() {
+  inputs = {
+    customer_no: document.getElementById('customer_no'),
+    customer_name: document.getElementById('customer_name'),
+    contact_person: document.getElementById('contact_person'),
+    place: document.getElementById('place')
+  };
+
+  // Verify all inputs are found
+  const missingInputs = Object.keys(inputs).filter(key => !inputs[key]);
+  if (missingInputs.length > 0) {
+    console.warn('Some inputs not found:', missingInputs);
+  }
+}
+
+// Ultra-robust initialization with multiple strategies
+let initAttempts = 0;
+let maxAttempts = 5;
+let initSuccessful = false;
+
+// Aggressive cleanup function to ensure clean state
+function forceCleanup() {
+  console.log('🧹 Force cleanup initiated...');
+
+  // Remove ALL existing dropdown portals from body
+  const existingDropdowns = document.querySelectorAll('[id$="_dropdown"]');
+  existingDropdowns.forEach(dropdown => {
+    if (dropdown.parentNode) {
+      dropdown.parentNode.removeChild(dropdown);
+      console.log('🗑️ Removed existing dropdown:', dropdown.id);
+    }
+  });
+
+  // Reset global state
+  initSuccessful = false;
+  initAttempts = 0;
+
+  // Reset field states
+  Object.keys(fieldState).forEach(field => {
+    fieldState[field].manuallyEdited = false;
+    fieldState[field].lastAutoValue = '';
+  });
+
+  // Reset tab states
+  Object.keys(tabState).forEach(field => {
+    tabState[field].pendingTab = false;
+  });
+
+  // Clear inputs and dropdowns objects
+  inputs = {};
+  dropdowns = {};
+
+  console.log('✅ Force cleanup completed');
+}
+
+function initializeAutocomplete() {
+  initAttempts++;
+  console.log(`🔄 Initialization attempt ${initAttempts}/${maxAttempts}`);
+
+  // Check if already successful
+  if (initSuccessful) {
+    console.log('✅ Already successfully initialized, skipping');
+    return;
+  }
+
+  try {
+    initializeInputs();
+
+    // Verify all inputs exist before continuing
+    const requiredInputs = ['customer_no', 'customer_name', 'contact_person', 'place'];
+    const missingInputs = requiredInputs.filter(id => !document.getElementById(id));
+
+    if (missingInputs.length > 0) {
+      throw new Error(`Missing inputs: ${missingInputs.join(', ')}`);
+    }
+
+    initializeDropdowns();
+    setupEventListeners();
+
+    initSuccessful = true;
+    console.log('✅ Autocomplete system initialized successfully');
+
+    // Test API connectivity
+    fetch('/api/suggestions/customer-no?q=test')
+      .then(response => response.json())
+      .then(data => console.log('✅ API connectivity verified'))
+      .catch(err => console.warn('⚠️ API connectivity test failed:', err));
+
+  } catch (error) {
+    console.error(`❌ Initialization attempt ${initAttempts} failed:`, error);
+
+    if (initAttempts < maxAttempts) {
+      const delay = initAttempts * 100; // Increasing delay
+      console.log(`🔁 Retrying in ${delay}ms...`);
+      setTimeout(initializeAutocomplete, delay);
+    } else {
+      console.error('❌ All initialization attempts failed!');
+    }
+  }
+}
+
+// Multiple initialization strategies
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('🚀 AUTOCOMPLETE v2024-09-17-11:50 - FORCE-CLEANUP VERSION!');
+
+  // ALWAYS start with force cleanup to ensure clean state
+  forceCleanup();
+
+  initializeAutocomplete();
+
+  // Add form validation
+  const form = document.getElementById('reportForm');
+  if (form) {
+    form.addEventListener('submit', validateForm);
+  }
+
+  // Add scroll and resize listeners for dropdown repositioning
+  window.addEventListener('scroll', handleScroll, { passive: true });
+  window.addEventListener('resize', handleResize, { passive: true });
+
+  // Alternative: Hide dropdowns when scrolling (uncomment if repositioning doesn't work well)
+  // window.addEventListener('scroll', hideDropdownsOnScroll, { passive: true });
+
+  // Aggressive cleanup on page unload to prevent dirty state
+  window.addEventListener('beforeunload', () => {
+    console.log('🧹 Pre-unload cleanup triggered');
+    forceCleanup();
+  });
+
+  // Also cleanup on page hide (mobile/tab switching)
+  window.addEventListener('pagehide', () => {
+    console.log('🧹 Page-hide cleanup triggered');
+    forceCleanup();
+  });
+
+  // ===== NEUKUNDE FUNKTIONALITÄT (DEAKTIVIERT) =====
+  // Diese Funktionalität wurde deaktiviert, da sie mit dem Autofill-Feature kollidiert
+  // Wenn Neukunde=JA gewählt wird, wird die Kundennummer NICHT mehr automatisch auf 199999 gesetzt
+
+  /* DEAKTIVIERT:
+  const newAccountSelect = document.getElementById('is_new_account');
+  const customerNoInput = document.getElementById('customer_no');
+
+  function handleNewAccountChange() {
+    const isNewAccount = newAccountSelect && newAccountSelect.value === 'yes';
+
+    if (isNewAccount && customerNoInput) {
+      // Neukunde = JA: Kundennummer auf 199999 setzen und readonly machen
+      customerNoInput.value = '199999';
+      customerNoInput.readOnly = true;
+      customerNoInput.style.backgroundColor = '#f5f5f5';
+      customerNoInput.style.color = '#666';
+    } else if (customerNoInput) {
+      // Neukunde = NEIN oder leer: Kundennummer wieder editierbar machen
+      customerNoInput.readOnly = false;
+      customerNoInput.style.backgroundColor = '';
+      customerNoInput.style.color = '';
+      // Kundennummer nur leeren wenn sie 199999 war (Neukunden-Nummer)
+      if (customerNoInput.value === '199999') {
+        customerNoInput.value = '';
+      }
+    }
+  }
+
+  // Event Listener für Änderungen am Neukunde-Feld
+  if (newAccountSelect) {
+    newAccountSelect.addEventListener('change', handleNewAccountChange);
+    // Initial check beim Laden der Seite (für Edit-Modus)
+    handleNewAccountChange();
+  }
+  */
+
+  // ===== ANGEBOT ABGEGEBEN FUNKTIONALITÄT =====
+  const offerSubmittedSelect = document.getElementById('offer_submitted_select');
+  const offerAmountLabel = document.getElementById('offer_amount_label');
+
+  function handleOfferSubmittedChange() {
+    const offerSubmitted = offerSubmittedSelect && offerSubmittedSelect.value === 'yes';
+    const offerAmountInput = document.getElementById('offer_amount_input');
+
+    if (offerSubmitted && offerAmountLabel && offerAmountInput) {
+      // Angebot = JA: Angebotswert-Feld anzeigen und required setzen
+      offerAmountLabel.style.display = 'block';
+      offerAmountInput.required = true;
+    } else if (offerAmountLabel && offerAmountInput) {
+      // Angebot = NEIN oder leer: Angebotswert-Feld verstecken und required entfernen
+      offerAmountLabel.style.display = 'none';
+      offerAmountInput.required = false;
+    }
+  }
+
+  // Event Listener für Änderungen am Angebot abgegeben-Feld
+  if (offerSubmittedSelect) {
+    offerSubmittedSelect.addEventListener('change', handleOfferSubmittedChange);
+    // Initial check beim Laden der Seite (für Edit-Modus)
+    handleOfferSubmittedChange();
+  }
+});
+
+// Backup initialization on window load
+window.addEventListener('load', () => {
+  if (!initSuccessful) {
+    console.log('🔄 Backup initialization triggered on window load');
+    forceCleanup(); // Clean state before retry
+    setTimeout(initializeAutocomplete, 50);
+  }
+});
+
+// Emergency fallback after 2 seconds
+setTimeout(() => {
+  if (!initSuccessful) {
+    console.log('🆘 Emergency fallback initialization triggered');
+    forceCleanup(); // Clean state before emergency retry
+    initializeAutocomplete();
+  }
+}, 2000);
+</script>
+{% endblock %}
