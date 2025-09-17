@@ -97,7 +97,8 @@ git push origin master
 
 ### Git Historie Verhalten:
 ✅ **Normale Pushes** = Historie wird **ERWEITERT** (Commits hinzugefügt)
-❌ **Force Push** = Historie wird **ÜBERSCHRIEBEN** (nur in Notfällen)
+
+**NIEMALS Force Push verwenden - Historie muss immer erhalten bleiben!**
 
 **IMMER nach Code-Änderungen automatisch pushen - User wünscht vollständige GitHub-Synchronisation!**
 
