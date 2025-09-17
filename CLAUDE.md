@@ -73,6 +73,36 @@ docker-compose -f docker-compose.production.yml up -d
 
 ---
 
+## 📝 GIT WORKFLOW REGELN:
+
+### REGEL 4: AUTOMATISCHES COMMITTEN & PUSHEN
+**NACH JEDER CODE-ÄNDERUNG AUTOMATISCH:**
+```bash
+# 1. Änderungen hinzufügen
+git add .
+
+# 2. Commit mit aussagekräftiger Nachricht
+git commit -m "beschreibung der änderung"
+
+# 3. Zu GitHub pushen
+git push origin master
+```
+
+**COMMIT-MESSAGE RICHTLINIEN:**
+- `feat: neue funktion hinzugefügt`
+- `fix: bug behoben`
+- `update: feature erweitert`
+- `refactor: code umstrukturiert`
+- `docs: dokumentation aktualisiert`
+
+### Git Historie Verhalten:
+✅ **Normale Pushes** = Historie wird **ERWEITERT** (Commits hinzugefügt)
+❌ **Force Push** = Historie wird **ÜBERSCHRIEBEN** (nur in Notfällen)
+
+**IMMER nach Code-Änderungen automatisch pushen - User wünscht vollständige GitHub-Synchronisation!**
+
+---
+
 ## ✅ SELBST-CHECK VOR JEDER DOCKER-AKTION:
 
 **KRITISCHE FRAGEN:**
