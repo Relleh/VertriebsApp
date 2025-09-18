@@ -77,8 +77,19 @@
           <input type="number" step="0.01" min="0" name="order_value_eur" value="{{ '%.2f'|format(report.order_value_eur) if report else '0.00' }}" placeholder="0.00">
         </label>
         <label>
-          {{ t('offer_value_eur') }}
-          <input type="number" step="0.01" min="0" name="offer_value_eur" value="{{ '%.2f'|format(report.offer_value_eur) if report else '0.00' }}" placeholder="0.00">
+          {{ 'Angebot abgegeben (J/N)' if locale=='de' else 'Offer submitted (Y/N)' }}
+          <select name="offer_submitted" id="offer_submitted_select">
+            <option value="">{{ 'Bitte wählen' if locale=='de' else 'Please select' }}</option>
+            <option value="yes" {% if report and report.offer_submitted %}selected{% endif %}>{{ 'Ja' if locale=='de' else 'Yes' }}</option>
+            <option value="no" {% if report and report.offer_submitted == false %}selected{% endif %}>{{ 'Nein' if locale=='de' else 'No' }}</option>
+          </select>
+        </label>
+
+        <label id="offer_amount_label" style="{% if not (report and report.offer_submitted) %}display: none;{% endif %}">
+          {{ 'Angebotswert (EUR)' if locale=='de' else 'Offer amount (EUR)' }}
+          <input type="number" step="0.01" min="0.01" name="offer_amount_eur" id="offer_amount_input"
+                 value="{{ '%.2f'|format(report.offer_amount_eur) if report and report.offer_amount_eur else '' }}"
+                 placeholder="0.00">
         </label>
       </div>
     </div>
@@ -157,28 +168,6 @@
         <label class="checkbox-label">
           <input type="checkbox" name="presented_current_promotion" value="true" {% if report and report.presented_current_promotion %}checked{% endif %}>
           <span>{{ 'Aktuelle Promotion' if locale=='de' else 'Current promotion' }}</span>
-        </label>
-      </div>
-    </div>
-
-    <!-- Angebot abgegeben -->
-    <div class="form-section">
-      <h3>{{ 'Angebot' if locale=='de' else 'Offer' }}</h3>
-      <div class="grid two">
-        <label>
-          {{ 'Angebot abgegeben (J/N)' if locale=='de' else 'Offer submitted (Y/N)' }}
-          <select name="offer_submitted" id="offer_submitted_select">
-            <option value="">{{ 'Bitte wählen' if locale=='de' else 'Please select' }}</option>
-            <option value="yes" {% if report and report.offer_submitted %}selected{% endif %}>{{ 'Ja' if locale=='de' else 'Yes' }}</option>
-            <option value="no" {% if report and report.offer_submitted == false %}selected{% endif %}>{{ 'Nein' if locale=='de' else 'No' }}</option>
-          </select>
-        </label>
-
-        <label id="offer_amount_label" style="{% if not (report and report.offer_submitted) %}display: none;{% endif %}">
-          {{ 'Angebotswert (EUR)' if locale=='de' else 'Offer amount (EUR)' }}
-          <input type="number" step="0.01" min="0.01" name="offer_amount_eur" id="offer_amount_input"
-                 value="{{ '%.2f'|format(report.offer_amount_eur) if report and report.offer_amount_eur else '' }}"
-                 placeholder="0.00">
         </label>
       </div>
     </div>
