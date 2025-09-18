@@ -94,6 +94,33 @@
       </div>
     </div>
 
+    <!-- Neue Felder: Vorgestellte Produkte -->
+    <div class="form-section">
+      <h3>{{ 'Vorgestellte Produkte' if locale=='de' else 'Products presented' }}</h3>
+      <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+        <label class="checkbox-label">
+          <input type="checkbox" name="presented_new_products" value="true" {% if report and report.presented_new_products %}checked{% endif %}>
+          <span>{{ 'Neuprodukte' if locale=='de' else 'New products' }}</span>
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" name="presented_diamond" value="true" {% if report and report.presented_diamond %}checked{% endif %}>
+          <span>{{ 'Diamant' if locale=='de' else 'Diamond' }}</span>
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" name="presented_abrasive_backing" value="true" {% if report and report.presented_abrasive_backing %}checked{% endif %}>
+          <span>{{ 'Schleifmittel auf Unterlage' if locale=='de' else 'Abrasive on backing' }}</span>
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" name="presented_cutting_discs" value="true" {% if report and report.presented_cutting_discs %}checked{% endif %}>
+          <span>{{ 'Trennscheiben' if locale=='de' else 'Cutting discs' }}</span>
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" name="presented_current_promotion" value="true" {% if report and report.presented_current_promotion %}checked{% endif %}>
+          <span>{{ 'Aktuelle Promotion' if locale=='de' else 'Current promotion' }}</span>
+        </label>
+      </div>
+    </div>
+
     <div class="form-section">
       <h3>{{ t('report_section') }}</h3>
       <div class="grid two">
@@ -143,33 +170,6 @@
           <option value="PREVENTED" {% if report and report.day_status=='PREVENTED' %}selected{% endif %}>{{ 'Verhindert' if locale=='de' else 'Prevented' }}</option>
         </select>
       </label>
-    </div>
-
-    <!-- Neue Felder: Vorgestellte Produkte -->
-    <div class="form-section">
-      <h3>{{ 'Vorgestellte Produkte' if locale=='de' else 'Products presented' }}</h3>
-      <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
-        <label class="checkbox-label">
-          <input type="checkbox" name="presented_new_products" value="true" {% if report and report.presented_new_products %}checked{% endif %}>
-          <span>{{ 'Neuprodukte' if locale=='de' else 'New products' }}</span>
-        </label>
-        <label class="checkbox-label">
-          <input type="checkbox" name="presented_diamond" value="true" {% if report and report.presented_diamond %}checked{% endif %}>
-          <span>{{ 'Diamant' if locale=='de' else 'Diamond' }}</span>
-        </label>
-        <label class="checkbox-label">
-          <input type="checkbox" name="presented_abrasive_backing" value="true" {% if report and report.presented_abrasive_backing %}checked{% endif %}>
-          <span>{{ 'Schleifmittel auf Unterlage' if locale=='de' else 'Abrasive on backing' }}</span>
-        </label>
-        <label class="checkbox-label">
-          <input type="checkbox" name="presented_cutting_discs" value="true" {% if report and report.presented_cutting_discs %}checked{% endif %}>
-          <span>{{ 'Trennscheiben' if locale=='de' else 'Cutting discs' }}</span>
-        </label>
-        <label class="checkbox-label">
-          <input type="checkbox" name="presented_current_promotion" value="true" {% if report and report.presented_current_promotion %}checked{% endif %}>
-          <span>{{ 'Aktuelle Promotion' if locale=='de' else 'Current promotion' }}</span>
-        </label>
-      </div>
     </div>
 
     <div class="row gap">
