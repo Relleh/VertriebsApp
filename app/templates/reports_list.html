@@ -10,12 +10,13 @@
   <!-- Search and Sort Controls -->
   <div class="controls-row" style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 0.5rem;">
     <div style="flex: 1;">
-      <input type="text" id="searchInput" placeholder="Berichte durchsuchen..." value="{{ current_search if current_search else '' }}" 
-             style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 0.25rem;" 
+      <label for="searchInput" style="font-weight: 500; margin-bottom: 0.25rem; display: block;">Suchen:</label>
+      <input type="text" id="searchInput" placeholder="Berichte durchsuchen..." value="{{ current_search if current_search else '' }}"
+             style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 0.25rem;"
              onkeyup="performSearch()">
     </div>
     <div style="display: flex; gap: 0.5rem; align-items: center;">
-      <label style="font-weight: 500;">Sortieren nach:</label>
+      <label for="sortSelect" style="font-weight: 500;">Sortieren nach:</label>
       <select id="sortSelect" onchange="updateSort()" style="padding: 0.5rem; border: 1px solid #ddd; border-radius: 0.25rem;">
         <option value="date" {{ 'selected' if current_sort == 'date' else '' }}>Datum</option>
         <option value="customer" {{ 'selected' if current_sort == 'customer' else '' }}>Kunde</option>
