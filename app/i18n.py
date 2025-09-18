@@ -44,6 +44,10 @@ DE = {
     'additional_info': 'Zusätzliche Informationen',
     'fun_mode': 'Fun Mode',
     'default_classification': 'Standardwert (C) - kein Wert hinterlegt',
+
+    # Multi-Match Modal
+    'multiple_matches_found': 'Mehrere Treffer gefunden',
+    'select_customer': 'Bitte wählen Sie den gewünschten Kunden:',
 }
 
 EN = {
@@ -91,6 +95,10 @@ EN = {
     'additional_info': 'Additional Information',
     'fun_mode': 'Fun Mode',
     'default_classification': 'Default value (C) - no value stored',
+
+    # Multi-Match Modal
+    'multiple_matches_found': 'Multiple Matches Found',
+    'select_customer': 'Please select the desired customer:',
 }
 
 def t(key: str, locale: str = 'de') -> str:
