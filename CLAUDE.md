@@ -104,6 +104,53 @@ git push origin master
 
 ---
 
+## ⚡ EFFIZIENTER CODE-UPDATE WORKFLOW:
+
+### PROBLEM: Warum bisher immer Full Rebuild?
+❌ **docker-compose.production.yml** hat **KEINE Volume Mounts** für app-Code
+❌ Code wird nur beim **Build-Time** ins Image kopiert
+❌ Änderungen sind **nicht automatisch** im Container sichtbar
+❌ Deshalb bisher: `docker-compose up -d --build` (langsam!)
+
+### ✅ LÖSUNG 1: FAST SYNC SCRIPT (EMPFOHLEN für Production)
+```bash
+# NACH Code-Änderungen (Templates, Python, etc.):
+./sync-code.sh
+
+# Das Script macht:
+# 1. docker cp ./app/. container:/app/app/
+# 2. docker-compose restart app (KEIN rebuild!)
+# 3. Fertig in 5-10 Sekunden statt 2+ Minuten!
+```
+
+### ✅ LÖSUNG 2: DEVELOPMENT MODE (für intensive Entwicklung)
+```bash
+# Starte Development Container mit Volume Mounts:
+docker-compose -f docker-compose.production.yml down
+docker-compose -f docker-compose.dev.yml up -d
+
+# Jetzt sind Änderungen SOFORT sichtbar (auto-reload)
+# Zurück zu Production:
+docker-compose -f docker-compose.dev.yml down
+docker-compose -f docker-compose.production.yml up -d
+```
+
+### ⚠️ WANN Full Rebuild nötig:
+- **Neue Dependencies** in requirements.txt
+- **Dockerfile-Änderungen**
+- **Systempackete** hinzugefügt
+- **Erste Installation**
+
+### 🚀 NEUE STANDARD-WORKFLOW:
+1. **Code ändern** (Templates, Python, etc.)
+2. **`./sync-code.sh`** ausführen (5-10 Sek)
+3. **Git push** (automatisch)
+4. **Fertig!** ✅
+
+**NIEMALS mehr `--build` außer bei Dependencies/Dockerfile-Änderungen!**
+
+---
+
 ## ✅ SELBST-CHECK VOR JEDER DOCKER-AKTION:
 
 **KRITISCHE FRAGEN:**
