@@ -21,7 +21,7 @@ class ReportBase(BaseModel):
     # Neue Felder für vorgestellte Produkte
     presented_new_products: Optional[bool] = None
     presented_diamond: Optional[bool] = None
-    presented_abrasive_backing: Optional[bool] = None
+    presented_coated_abrasives: Optional[bool] = None
     presented_cutting_discs: Optional[bool] = None
     presented_current_promotion: Optional[bool] = None
     # Angebot abgegeben und Angebotswert

@@ -107,8 +107,8 @@
           <span>{{ 'Diamant' if locale=='de' else 'Diamond' }}</span>
         </label>
         <label class="checkbox-label">
-          <input type="checkbox" name="presented_abrasive_backing" value="true" {% if report and report.presented_abrasive_backing %}checked{% endif %}>
-          <span>{{ 'Schleifmittel auf Unterlage' if locale=='de' else 'Abrasive on backing' }}</span>
+          <input type="checkbox" name="presented_coated_abrasives" value="true" {% if report and report.presented_coated_abrasives %}checked{% endif %}>
+          <span>{{ 'Schleifmittel auf Unterlage' if locale=='de' else 'Coated abrasives' }}</span>
         </label>
         <label class="checkbox-label">
           <input type="checkbox" name="presented_cutting_discs" value="true" {% if report and report.presented_cutting_discs %}checked{% endif %}>

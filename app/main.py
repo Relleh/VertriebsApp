@@ -197,7 +197,7 @@ def create_report(
     # Neue Felder
     presented_new_products: Optional[str] = Form(None),
     presented_diamond: Optional[str] = Form(None),
-    presented_abrasive_backing: Optional[str] = Form(None),
+    presented_coated_abrasives: Optional[str] = Form(None),
     presented_cutting_discs: Optional[str] = Form(None),
     presented_current_promotion: Optional[str] = Form(None),
     offer_submitted: Optional[str] = Form(None),
@@ -264,7 +264,7 @@ def create_report(
                 'day_status': day_status_ui,
                 'presented_new_products': presented_new_products,
                 'presented_diamond': presented_diamond,
-                'presented_abrasive_backing': presented_abrasive_backing,
+                'presented_coated_abrasives': presented_coated_abrasives,
                 'presented_cutting_discs': presented_cutting_discs,
                 'presented_current_promotion': presented_current_promotion,
                 'offer_submitted': offer_submitted,
@@ -290,7 +290,7 @@ def create_report(
         # Neue Felder
         presented_new_products=(presented_new_products == 'true') if presented_new_products else None,
         presented_diamond=(presented_diamond == 'true') if presented_diamond else None,
-        presented_abrasive_backing=(presented_abrasive_backing == 'true') if presented_abrasive_backing else None,
+        presented_coated_abrasives=(presented_coated_abrasives == 'true') if presented_coated_abrasives else None,
         presented_cutting_discs=(presented_cutting_discs == 'true') if presented_cutting_discs else None,
         presented_current_promotion=(presented_current_promotion == 'true') if presented_current_promotion else None,
         offer_submitted=(offer_submitted == 'yes') if offer_submitted else None,
@@ -346,7 +346,7 @@ def update_report(
     # Neue Felder
     presented_new_products: Optional[str] = Form(None),
     presented_diamond: Optional[str] = Form(None),
-    presented_abrasive_backing: Optional[str] = Form(None),
+    presented_coated_abrasives: Optional[str] = Form(None),
     presented_cutting_discs: Optional[str] = Form(None),
     presented_current_promotion: Optional[str] = Form(None),
     offer_submitted: Optional[str] = Form(None),
@@ -416,7 +416,7 @@ def update_report(
     # Neue Felder
     r.presented_new_products = (presented_new_products == 'true') if presented_new_products else None
     r.presented_diamond = (presented_diamond == 'true') if presented_diamond else None
-    r.presented_abrasive_backing = (presented_abrasive_backing == 'true') if presented_abrasive_backing else None
+    r.presented_coated_abrasives = (presented_coated_abrasives == 'true') if presented_coated_abrasives else None
     r.presented_cutting_discs = (presented_cutting_discs == 'true') if presented_cutting_discs else None
     r.presented_current_promotion = (presented_current_promotion == 'true') if presented_current_promotion else None
     r.offer_submitted = (offer_submitted == 'yes') if offer_submitted else None

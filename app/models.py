@@ -31,7 +31,7 @@ class Report(Base):
     # Neue Felder für vorgestellte Produkte
     presented_new_products = Column(Boolean, nullable=True)
     presented_diamond = Column(Boolean, nullable=True)
-    presented_abrasive_backing = Column(Boolean, nullable=True)
+    presented_coated_abrasives = Column(Boolean, nullable=True)
     presented_cutting_discs = Column(Boolean, nullable=True)
     presented_current_promotion = Column(Boolean, nullable=True)
 
