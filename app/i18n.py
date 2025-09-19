@@ -48,6 +48,14 @@ DE = {
     # Multi-Match Modal
     'multiple_matches_found': 'Mehrere Treffer gefunden',
     'select_customer': 'Bitte wählen Sie den gewünschten Kunden:',
+
+    # Search and Sort
+    'search': 'Suchen:',
+    'search_placeholder': 'Berichte durchsuchen...',
+    'sort_by': 'Sortieren nach:',
+    'customer': 'Kunde',
+    'oldest_first': 'Älteste zuerst',
+    'newest_first': 'Neueste zuerst',
 }
 
 EN = {
@@ -99,6 +107,14 @@ EN = {
     # Multi-Match Modal
     'multiple_matches_found': 'Multiple Matches Found',
     'select_customer': 'Please select the desired customer:',
+
+    # Search and Sort
+    'search': 'Search:',
+    'search_placeholder': 'Search reports...',
+    'sort_by': 'Sort by:',
+    'customer': 'Customer',
+    'oldest_first': 'Oldest first',
+    'newest_first': 'Newest first',
 }
 
 def t(key: str, locale: str = 'de') -> str:

@@ -10,19 +10,19 @@
   <!-- Search and Sort Controls -->
   <div class="controls-row" style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 0.5rem;">
     <div style="flex: 1;">
-      <label for="searchInput" style="font-weight: 500; margin-bottom: 0.25rem; display: block;">Suchen:</label>
-      <input type="text" id="searchInput" placeholder="Berichte durchsuchen..." value="{{ current_search if current_search else '' }}"
+      <label for="searchInput" style="font-weight: 500; margin-bottom: 0.25rem; display: block;">{{ t('search') }}</label>
+      <input type="text" id="searchInput" placeholder="{{ t('search_placeholder') }}" value="{{ current_search if current_search else '' }}"
              style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 0.25rem;"
              onkeyup="performSearch()">
     </div>
     <div style="display: flex; gap: 0.5rem; align-items: center;">
-      <label for="sortSelect" style="font-weight: 500;">Sortieren nach:</label>
+      <label for="sortSelect" style="font-weight: 500;">{{ t('sort_by') }}</label>
       <select id="sortSelect" onchange="updateSort()" style="padding: 0.5rem; border: 1px solid #ddd; border-radius: 0.25rem;">
-        <option value="date" {{ 'selected' if current_sort == 'date' else '' }}>Datum</option>
-        <option value="customer" {{ 'selected' if current_sort == 'customer' else '' }}>Kunde</option>
+        <option value="date" {{ 'selected' if current_sort == 'date' else '' }}>{{ t('date') }}</option>
+        <option value="customer" {{ 'selected' if current_sort == 'customer' else '' }}>{{ t('customer') }}</option>
       </select>
-      <button onclick="toggleOrder()" style="padding: 0.5rem 1rem; border: 1px solid #ddd; border-radius: 0.25rem; background: white; cursor: pointer;" 
-              title="{{ 'Älteste zuerst' if current_order == 'desc' else 'Neueste zuerst' }}">
+      <button onclick="toggleOrder()" style="padding: 0.5rem 1rem; border: 1px solid #ddd; border-radius: 0.25rem; background: white; cursor: pointer;"
+              title="{{ t('oldest_first') if current_order == 'desc' else t('newest_first') }}">
         {{ '▲' if current_order == 'desc' else '▼' }}
       </button>
     </div>
