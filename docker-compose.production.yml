@@ -36,8 +36,7 @@ services:
       DB_PORT: 5432
     volumes:
       - ./logs:/app/logs
-      - ./Kundenstamm_Daten.csv:/app/data/customers.csv:ro
-      - ./ABC-Kunden.csv:/app/data/abc_customers.csv:ro
+      - ./Importdaten/kundenstamm_komplett.csv:/app/data/kundenstamm_komplett.csv:ro
     networks:
       - app-network
 

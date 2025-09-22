@@ -14,11 +14,11 @@ from .models import Report
 from .schemas import ReportCreate, ReportUpdate
 from .i18n import t
 from .auth import router as auth_router, get_current_user, User
-from .customers import (
-    load_csv_into_db, search_customers, get_customer_number_suggestions,
-    get_customer_name_suggestions, get_place_suggestions, find_matching_customers
+from .unified_customers import (
+    load_unified_csv_into_db, search_customers, get_customer_number_suggestions,
+    get_customer_name_suggestions, get_place_suggestions, find_matching_customers,
+    get_customer_data
 )
-from .abc_customers import load_abc_csv_into_db, get_abc_data
 
 app = FastAPI(title="Vertriebsberichte App")
 
@@ -39,18 +39,15 @@ templates = Jinja2Templates(directory=os.path.join(os.path.dirname(__file__), 't
 # Create tables on startup
 Base.metadata.create_all(bind=engine)
 
-# Load CSV initially
+# Load unified CSV initially
 @app.on_event("startup")
 def startup_load_csv():
     with next(get_db()) as db:
         try:
-            load_csv_into_db(db)
+            customers_loaded, abc_loaded = load_unified_csv_into_db(db)
+            print(f"[INFO] Loaded {customers_loaded} customers from unified CSV")
         except Exception as e:
-            print("[WARN] Konnte CSV nicht laden:", e)
-        try:
-            load_abc_csv_into_db(db)
-        except Exception as e:
-            print("[WARN] Konnte ABC-CSV nicht laden:", e)
+            print("[WARN] Could not load unified CSV:", e)
 
 def get_locale(request: Request) -> str:
     # Check in this order: 1. Session, 2. Cookie, 3. Default
@@ -448,12 +445,12 @@ def reload_customers(request: Request, db: Session = Depends(get_db)):
         return RedirectResponse('/login')
     try:
         # Force reload by resetting the cache
-        from app import customers
-        customers._last_loaded_mtime = None
-        inserted = load_csv_into_db(db)
+        from app import unified_customers
+        unified_customers._last_loaded_mtime = None
+        customers_loaded, abc_loaded = load_unified_csv_into_db(db)
     except Exception as e:
         return JSONResponse({'ok': False, 'error': str(e)})
-    return JSONResponse({'ok': True, 'inserted': inserted})
+    return JSONResponse({'ok': True, 'customers_loaded': customers_loaded, 'abc_loaded': abc_loaded})
 
 # New individual suggestion endpoints for enhanced autocomplete
 @app.get('/api/suggestions/customer-no')
@@ -480,17 +477,7 @@ def find_customers_by_field(field: str, value: str, db: Session = Depends(get_db
     if field not in ['customer_no', 'customer_name', 'place']:
         raise HTTPException(status_code=400, detail='Invalid field')
     matches = find_matching_customers(db, field, value, limit=25)
-    # Enrich matches with ABC data
-    for match in matches:
-        abc_data = get_abc_data(db, match['customer_no'])
-        if abc_data:
-            match['abc_classification'] = abc_data['abc_classification']
-            match['is_new_customer'] = abc_data['is_new_customer']
-            match['is_default_classification'] = abc_data.get('is_default_classification', False)
-        else:
-            match['abc_classification'] = 'C'
-            match['is_new_customer'] = False
-            match['is_default_classification'] = True
+    # Data already enriched in find_matching_customers from unified table
     return {'matches': matches}
 
 @app.get('/api/customers/abc-data')
@@ -498,8 +485,12 @@ def get_customer_abc_data(customer_no: str, db: Session = Depends(get_db)):
     """Get ABC classification and new customer status for a customer number"""
     if not customer_no:
         return {'abc_classification': 'C', 'is_new_customer': False, 'is_default_classification': True}
-    abc_data = get_abc_data(db, customer_no)
-    if abc_data:
-        return abc_data
+    customer_data = get_customer_data(db, customer_no)
+    if customer_data:
+        return {
+            'abc_classification': customer_data['abc_classification'],
+            'is_new_customer': customer_data['is_new_customer'],
+            'is_default_classification': customer_data['is_default_classification']
+        }
     return {'abc_classification': 'C', 'is_new_customer': False, 'is_default_classification': True}
 

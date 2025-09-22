@@ -52,10 +52,14 @@ class Report(Base):
 class Customer(Base):
     __tablename__ = "customers"
     id = Column(Integer, primary_key=True, index=True)
-    customer_no = Column(String, index=True, nullable=False)
+    customer_no = Column(String, index=True, nullable=False, unique=True)
     customer_name = Column(String, index=True, nullable=False)
     contact_person = Column(String, index=True, nullable=True)
     place = Column(String, index=True, nullable=True)
+    abc_classification = Column(String, nullable=True)
+    is_new_customer = Column(Boolean, default=False, nullable=False)
+    revenue_last_year = Column(Numeric(12, 2), nullable=True)
+    revenue_current_year = Column(Numeric(12, 2), nullable=True)
 
 
 class ABCCustomer(Base):
