@@ -4,7 +4,7 @@ from typing import List, Dict, Optional
 from decimal import Decimal
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
-from .models import Customer, ABCCustomer
+from .models import Customer
 
 CSV_PATH = os.environ.get('UNIFIED_CSV_PATH', '/app/data/kundenstamm_komplett.csv')
 _last_loaded_mtime: float | None = None
@@ -20,9 +20,9 @@ def parse_german_decimal(value: str) -> Optional[Decimal]:
     except:
         return None
 
-def load_unified_csv_into_db(db: Session) -> tuple[int, int]:
-    """Load unified customer CSV into both customers and abc_customers tables
-    Returns: (customers_inserted, abc_records_inserted)"""
+def load_unified_csv_into_db(db: Session) -> int:
+    """Load unified customer CSV into customers table
+    Returns: customers_inserted"""
     global _last_loaded_mtime
     if not os.path.exists(CSV_PATH):
         print(f"[WARN] Unified CSV not found at {CSV_PATH}")
@@ -30,11 +30,10 @@ def load_unified_csv_into_db(db: Session) -> tuple[int, int]:
 
     mtime = os.path.getmtime(CSV_PATH)
     if _last_loaded_mtime is not None and mtime <= _last_loaded_mtime:
-        return (0, 0)  # no change
+        return 0  # no change
 
-    # Clear both tables
+    # Clear customers table
     db.query(Customer).delete()
-    db.query(ABCCustomer).delete()
 
     # Try different encodings
     encodings = ['cp1252', 'utf-8-sig', 'utf-8', 'latin-1', 'iso-8859-1']
@@ -56,7 +55,6 @@ def load_unified_csv_into_db(db: Session) -> tuple[int, int]:
         raise RuntimeError(f"Could not decode unified CSV file with any of these encodings: {encodings}")
 
     customers_inserted = 0
-    abc_inserted = 0
 
     with f:
         # Auto-detect delimiter
@@ -104,19 +102,11 @@ def load_unified_csv_into_db(db: Session) -> tuple[int, int]:
             ))
             customers_inserted += 1
 
-            # Also maintain abc_customers table for backward compatibility
-            # (can be removed later if not needed)
-            db.add(ABCCustomer(
-                customer_no=customer_no,
-                abc_classification=abc_class,
-                is_new_customer=is_new
-            ))
-            abc_inserted += 1
 
     db.commit()
     _last_loaded_mtime = mtime
     print(f"[INFO] Loaded {customers_inserted} customers from unified CSV")
-    return (customers_inserted, abc_inserted)
+    return customers_inserted
 
 def get_customer_data(db: Session, customer_no: str) -> Optional[Dict]:
     """Get all customer data including ABC and revenue info"""

@@ -44,7 +44,7 @@ Base.metadata.create_all(bind=engine)
 def startup_load_csv():
     with next(get_db()) as db:
         try:
-            customers_loaded, abc_loaded = load_unified_csv_into_db(db)
+            customers_loaded = load_unified_csv_into_db(db)
             print(f"[INFO] Loaded {customers_loaded} customers from unified CSV")
         except Exception as e:
             print("[WARN] Could not load unified CSV:", e)
@@ -447,10 +447,10 @@ def reload_customers(request: Request, db: Session = Depends(get_db)):
         # Force reload by resetting the cache
         from app import unified_customers
         unified_customers._last_loaded_mtime = None
-        customers_loaded, abc_loaded = load_unified_csv_into_db(db)
+        customers_loaded = load_unified_csv_into_db(db)
     except Exception as e:
         return JSONResponse({'ok': False, 'error': str(e)})
-    return JSONResponse({'ok': True, 'customers_loaded': customers_loaded, 'abc_loaded': abc_loaded})
+    return JSONResponse({'ok': True, 'customers_loaded': customers_loaded})
 
 # New individual suggestion endpoints for enhanced autocomplete
 @app.get('/api/suggestions/customer-no')

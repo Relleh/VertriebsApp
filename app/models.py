@@ -60,11 +60,3 @@ class Customer(Base):
     is_new_customer = Column(Boolean, default=False, nullable=False)
     revenue_last_year = Column(Numeric(12, 2), nullable=True)
     revenue_current_year = Column(Numeric(12, 2), nullable=True)
-
-
-class ABCCustomer(Base):
-    __tablename__ = "abc_customers"
-    id = Column(Integer, primary_key=True, index=True)
-    customer_no = Column(String, index=True, nullable=False, unique=True)
-    abc_classification = Column(String, nullable=True)  # 'A', 'B', 'C' or '-' for none
-    is_new_customer = Column(Boolean, default=False, nullable=False)
