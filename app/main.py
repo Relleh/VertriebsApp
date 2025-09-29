@@ -197,7 +197,7 @@ def create_report(
     next_visit_weeks: int = Form(...), # Pflicht-Flag hier ändern -> Form(None)
     is_new_account: str = Form(...),   # 'yes'/'no'
     overnight: str = Form(...),        # 'yes'/'no'
-    day_status_ui: str = Form(...),    # 'MOBILE'/'OFFICE'/'PREVENTED' (UI mapped)
+    day_status_ui: str = Form(...),    # 'MOBILE'/'OFFICE'/'PREVENTED'/'FAIR'/'SETUP' (UI mapped)
     # Neue Felder
     presented_new_products: Optional[str] = Form(None),
     presented_diamond: Optional[str] = Form(None),
@@ -218,7 +218,7 @@ def create_report(
     # Validate
     if classification not in ('A','B','C'):
         errors.append('Ungültige Klassifikation')
-    if day_status_ui not in ('MOBILE','OFFICE','PREVENTED'):
+    if day_status_ui not in ('MOBILE','OFFICE','PREVENTED','FAIR','SETUP'):
         errors.append('Ungültiger Tagesstatus')
     
     # Date validation - no future dates allowed
@@ -368,7 +368,7 @@ def update_report(
     
     if classification not in ('A','B','C'):
         errors.append('Ungültige Klassifikation')
-    if day_status_ui not in ('MOBILE','OFFICE','PREVENTED'):
+    if day_status_ui not in ('MOBILE','OFFICE','PREVENTED','FAIR','SETUP'):
         errors.append('Ungültiger Tagesstatus')
     
     # Date validation - no future dates allowed

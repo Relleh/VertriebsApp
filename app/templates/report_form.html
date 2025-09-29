@@ -163,11 +163,13 @@
       </div>
       
       <label>
-        {{ 'Unterwegs/Bürotag/Verhindert' if locale=='de' else 'Mobile/Office Day/Prevented' }}
+        {{ t('day_status') }}
         <select required name="day_status_ui">
-          <option value="MOBILE" {% if not report or report.day_status=='MOBILE' %}selected{% endif %}>{{ 'Unterwegs' if locale=='de' else 'Mobile' }}</option>
-          <option value="OFFICE" {% if report and report.day_status=='OFFICE' %}selected{% endif %}>{{ 'Bürotag' if locale=='de' else 'Office Day' }}</option>
-          <option value="PREVENTED" {% if report and report.day_status=='PREVENTED' %}selected{% endif %}>{{ 'Verhindert' if locale=='de' else 'Prevented' }}</option>
+          <option value="MOBILE" {% if not report or report.day_status=='MOBILE' %}selected{% endif %}>{{ t('mobile') }}</option>
+          <option value="OFFICE" {% if report and report.day_status=='OFFICE' %}selected{% endif %}>{{ t('office') }}</option>
+          <option value="PREVENTED" {% if report and report.day_status=='PREVENTED' %}selected{% endif %}>{{ t('prevented') }}</option>
+          <option value="FAIR" {% if report and report.day_status=='FAIR' %}selected{% endif %}>{{ t('fair') }}</option>
+          <option value="SETUP" {% if report and report.day_status=='SETUP' %}selected{% endif %}>{{ t('setup') }}</option>
         </select>
       </label>
     </div>

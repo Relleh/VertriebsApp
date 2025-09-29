@@ -25,8 +25,8 @@ class Report(Base):
     is_new_account = Column(Boolean, nullable=False)
     overnight = Column(Boolean, nullable=False)
 
-    # Store normalized day status: MOBILE/OFFICE/PREVENTED
-    day_status = Column(String, nullable=False)  # allowed: 'MOBILE','OFFICE','PREVENTED'
+    # Store normalized day status: MOBILE/OFFICE/PREVENTED/FAIR/SETUP
+    day_status = Column(String, nullable=False)  # allowed: 'MOBILE','OFFICE','PREVENTED','FAIR','SETUP'
 
     # Neue Felder für vorgestellte Produkte
     presented_new_products = Column(Boolean, nullable=True)
@@ -44,7 +44,7 @@ class Report(Base):
 
     __table_args__ = (
         CheckConstraint("classification IN ('A','B','C')", name='check_classification'),
-        CheckConstraint("day_status IN ('MOBILE','OFFICE','PREVENTED')", name='check_day_status'),
+        CheckConstraint("day_status IN ('MOBILE','OFFICE','PREVENTED','FAIR','SETUP')", name='check_day_status'),
         Index("ix_reports_owner_date", "owner_oid", "date"),
     )
 
