@@ -197,6 +197,7 @@ def create_report(
     next_visit_weeks: int = Form(...), # Pflicht-Flag hier ändern -> Form(None)
     is_new_account: str = Form(...),   # 'yes'/'no'
     overnight: str = Form(...),        # 'yes'/'no'
+    customer_active: str = Form(...),  # 'yes'/'no'
     day_status_ui: str = Form(...),    # 'MOBILE'/'OFFICE'/'PREVENTED'/'FAIR'/'SETUP' (UI mapped)
     # Neue Felder
     presented_new_products: Optional[str] = Form(None),
@@ -265,6 +266,7 @@ def create_report(
                 'next_visit_weeks': next_visit_weeks,
                 'is_new_account': is_new_account,
                 'overnight': overnight,
+                'customer_active': customer_active,
                 'day_status': day_status_ui,
                 'presented_new_products': presented_new_products,
                 'presented_diamond': presented_diamond,
@@ -290,6 +292,7 @@ def create_report(
         next_visit_weeks=next_visit_weeks,
         is_new_account=(is_new_account == 'yes'),
         overnight=(overnight == 'yes'),
+        customer_active=(customer_active == 'yes'),
         day_status=day_status_ui,
         # Neue Felder
         presented_new_products=(presented_new_products == 'true') if presented_new_products else None,
@@ -346,6 +349,7 @@ def update_report(
     next_visit_weeks: int = Form(...), # Pflicht-Flag hier ändern -> Form(None)
     is_new_account: str = Form(...),
     overnight: str = Form(...),
+    customer_active: str = Form(...),
     day_status_ui: str = Form(...),
     # Neue Felder
     presented_new_products: Optional[str] = Form(None),
@@ -416,6 +420,7 @@ def update_report(
     r.next_visit_weeks = next_visit_weeks
     r.is_new_account = (is_new_account == 'yes')
     r.overnight = (overnight == 'yes')
+    r.customer_active = (customer_active == 'yes')
     r.day_status = day_status_ui
     # Neue Felder
     r.presented_new_products = (presented_new_products == 'true') if presented_new_products else None
@@ -546,7 +551,8 @@ def generate_report_pdf(report, locale='de'):
         ['Klassifikation:', report.classification],
         ['Tagesstatus:', report.day_status],
         ['Neukunde:', 'Ja' if report.is_new_account else 'Nein'],
-        ['Übernachtung:', 'Ja' if report.overnight else 'Nein']
+        ['Übernachtung:', 'Ja' if report.overnight else 'Nein'],
+        ['Kunde aktiv:', 'Ja' if report.customer_active else 'Nein']
     ]
 
     content.append(Paragraph("Grunddaten", heading_style))

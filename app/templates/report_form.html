@@ -160,6 +160,15 @@
             <option value="no" {% if report and not report.overnight %}selected{% endif %}>{{ t('no') }}</option>
           </select>
         </label>
+
+        <label>
+          {{ t('customer_active') }}
+          <select required name="customer_active">
+            <option value="">{{ t('please_select') }}</option>
+            <option value="yes" {% if not report or report.customer_active %}selected{% endif %}>{{ t('yes') }}</option>
+            <option value="no" {% if report and not report.customer_active %}selected{% endif %}>{{ t('no') }}</option>
+          </select>
+        </label>
       </div>
       
       <label>

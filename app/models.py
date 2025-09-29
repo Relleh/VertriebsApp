@@ -24,6 +24,7 @@ class Report(Base):
 
     is_new_account = Column(Boolean, nullable=False)
     overnight = Column(Boolean, nullable=False)
+    customer_active = Column(Boolean, nullable=False, default=True)
 
     # Store normalized day status: MOBILE/OFFICE/PREVENTED/FAIR/SETUP
     day_status = Column(String, nullable=False)  # allowed: 'MOBILE','OFFICE','PREVENTED','FAIR','SETUP'
