@@ -157,7 +157,7 @@
           <select required name="overnight">
             <option value="">{{ t('please_select') }}</option>
             <option value="yes" {% if report and report.overnight %}selected{% endif %}>{{ t('yes') }}</option>
-            <option value="no" {% if report and not report.overnight %}selected{% endif %}>{{ t('no') }}</option>
+            <option value="no" {% if not report or not report.overnight %}selected{% endif %}>{{ t('no') }}</option>
           </select>
         </label>
 
