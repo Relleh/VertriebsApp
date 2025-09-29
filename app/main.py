@@ -538,24 +538,26 @@ def generate_report_pdf(report, locale='de'):
     content = []
 
     # Title
-    content.append(Paragraph("Vertriebsbericht", title_style))
+    content.append(Paragraph(t('pdf_title', locale), title_style))
     content.append(Spacer(1, 20))
 
-    # Grunddaten Table
+    # Basic Data Table
+    yes_no = lambda val: t('yes', locale) if val else t('no', locale)
+
     grunddaten_data = [
-        ['Datum:', str(report.date)],
-        ['Kundennummer:', report.customer_no],
-        ['Kundenname:', report.customer_name],
-        ['Ansprechpartner:', report.contact_person],
-        ['Ort:', report.place],
-        ['Klassifikation:', report.classification],
-        ['Tagesstatus:', report.day_status],
-        ['Neukunde:', 'Ja' if report.is_new_account else 'Nein'],
-        ['Übernachtung:', 'Ja' if report.overnight else 'Nein'],
-        ['Kunde aktiv:', 'Ja' if report.customer_active else 'Nein']
+        [t('pdf_date', locale), str(report.date)],
+        [t('pdf_customer_no', locale), report.customer_no],
+        [t('pdf_customer_name', locale), report.customer_name],
+        [t('pdf_contact_person', locale), report.contact_person],
+        [t('pdf_place', locale), report.place],
+        [t('pdf_classification', locale), report.classification],
+        [t('pdf_day_status', locale), t(report.day_status.lower(), locale) if report.day_status else ''],
+        [t('pdf_new_account', locale), yes_no(report.is_new_account)],
+        [t('pdf_overnight', locale), yes_no(report.overnight)],
+        [t('pdf_customer_active', locale), yes_no(report.customer_active)]
     ]
 
-    content.append(Paragraph("Grunddaten", heading_style))
+    content.append(Paragraph(t('pdf_basic_data', locale), heading_style))
     grunddaten_table = Table(grunddaten_data, colWidths=[2*inch, 4*inch])
     grunddaten_table.setStyle(TableStyle([
         ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
@@ -568,18 +570,18 @@ def generate_report_pdf(report, locale='de'):
     content.append(grunddaten_table)
     content.append(Spacer(1, 20))
 
-    # Werte Table
-    content.append(Paragraph("Werte", heading_style))
+    # Values Table
+    content.append(Paragraph(t('pdf_values', locale), heading_style))
     werte_data = [
-        ['Auftragswert (EUR):', f"{float(report.order_value_eur):.2f}" if report.order_value_eur else "0.00"],
-        ['Angebotswert (EUR):', f"{float(report.offer_value_eur):.2f}" if report.offer_value_eur else "0.00"],
-        ['Nächster Besuch (Wochen):', str(report.next_visit_weeks)]
+        [t('pdf_order_value', locale), f"{float(report.order_value_eur):.2f}" if report.order_value_eur else "0.00"],
+        [t('pdf_offer_value', locale), f"{float(report.offer_value_eur):.2f}" if report.offer_value_eur else "0.00"],
+        [t('pdf_next_visit', locale), str(report.next_visit_weeks)]
     ]
 
     if report.offer_submitted is not None:
-        werte_data.append(['Angebot abgegeben:', 'Ja' if report.offer_submitted else 'Nein'])
+        werte_data.append([t('pdf_offer_submitted', locale), yes_no(report.offer_submitted)])
     if report.offer_amount_eur:
-        werte_data.append(['Angebotsbetrag (EUR):', f"{float(report.offer_amount_eur):.2f}"])
+        werte_data.append([t('pdf_offer_amount', locale), f"{float(report.offer_amount_eur):.2f}"])
 
     werte_table = Table(werte_data, colWidths=[2*inch, 4*inch])
     werte_table.setStyle(TableStyle([
@@ -593,17 +595,17 @@ def generate_report_pdf(report, locale='de'):
     content.append(werte_table)
     content.append(Spacer(1, 20))
 
-    # Vorgestellte Produkte
+    # Presented Products
     if any([report.presented_new_products, report.presented_diamond,
             report.presented_coated_abrasives, report.presented_cutting_discs,
             report.presented_current_promotion]):
-        content.append(Paragraph("Vorgestellte Produkte", heading_style))
+        content.append(Paragraph(t('pdf_presented_products', locale), heading_style))
         produkte_data = []
-        if report.presented_new_products: produkte_data.append(['Neue Produkte:', 'Ja'])
-        if report.presented_diamond: produkte_data.append(['Diamond Produkte:', 'Ja'])
-        if report.presented_coated_abrasives: produkte_data.append(['Coated Abrasives:', 'Ja'])
-        if report.presented_cutting_discs: produkte_data.append(['Cutting Discs:', 'Ja'])
-        if report.presented_current_promotion: produkte_data.append(['Aktuelle Promotion:', 'Ja'])
+        if report.presented_new_products: produkte_data.append([t('pdf_new_products', locale), t('yes', locale)])
+        if report.presented_diamond: produkte_data.append([t('pdf_diamond', locale), t('yes', locale)])
+        if report.presented_coated_abrasives: produkte_data.append([t('pdf_coated_abrasives', locale), t('yes', locale)])
+        if report.presented_cutting_discs: produkte_data.append([t('pdf_cutting_discs', locale), t('yes', locale)])
+        if report.presented_current_promotion: produkte_data.append([t('pdf_current_promotion', locale), t('yes', locale)])
 
         produkte_table = Table(produkte_data, colWidths=[2*inch, 4*inch])
         produkte_table.setStyle(TableStyle([
@@ -617,19 +619,24 @@ def generate_report_pdf(report, locale='de'):
         content.append(produkte_table)
         content.append(Spacer(1, 20))
 
-    # Kurzbericht
-    content.append(Paragraph("Kurzbericht", heading_style))
+    # Short Report
+    content.append(Paragraph(t('pdf_short_report', locale), heading_style))
     content.append(Paragraph(report.short_report, styles['Normal']))
     content.append(Spacer(1, 15))
 
-    # Nächste Schritte
-    content.append(Paragraph("Nächste Schritte", heading_style))
+    # Next Steps
+    content.append(Paragraph(t('pdf_next_steps', locale), heading_style))
     content.append(Paragraph(report.next_steps, styles['Normal']))
     content.append(Spacer(1, 20))
 
-    # Erstellt von
-    content.append(Paragraph(f"Erstellt von: {report.owner_name or report.owner_email}", styles['Normal']))
-    content.append(Paragraph(f"Erstellt am: {report.created_at.strftime('%d.%m.%Y %H:%M') if report.created_at else 'Unbekannt'}", styles['Normal']))
+    # Created by
+    content.append(Paragraph(f"{t('pdf_created_by', locale)}: {report.owner_name or report.owner_email}", styles['Normal']))
+    if report.created_at:
+        date_format = '%d.%m.%Y %H:%M' if locale == 'de' else '%m/%d/%Y %H:%M'
+        content.append(Paragraph(f"{t('pdf_created_at', locale)}: {report.created_at.strftime(date_format)}", styles['Normal']))
+    else:
+        unknown_text = 'Unbekannt' if locale == 'de' else 'Unknown'
+        content.append(Paragraph(f"{t('pdf_created_at', locale)}: {unknown_text}", styles['Normal']))
 
     # Build PDF
     doc.build(content)
@@ -654,7 +661,8 @@ def download_report_pdf(report_id: int, request: Request, db: Session = Depends(
     pdf_buffer = generate_report_pdf(report, locale)
 
     # Create filename
-    filename = f"vertriebsbericht_{report.customer_no}_{report.date}.pdf"
+    file_prefix = "vertriebsbericht" if locale == 'de' else "sales_report"
+    filename = f"{file_prefix}_{report.customer_no}_{report.date}.pdf"
 
     # Return as streaming response for download
     return StreamingResponse(
