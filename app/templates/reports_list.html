@@ -1,5 +1,83 @@
 {% extends "base.html" %}
+
 {% block content %}
+<style>
+/* Custom styles for improved button layout */
+.actions-cell {
+  min-width: 160px;
+  white-space: nowrap;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.table-wrap table {
+  table-layout: auto;
+}
+
+.table-wrap th:last-child,
+.table-wrap td:last-child {
+  width: 160px;
+  min-width: 160px;
+}
+
+/* Improved controls layout */
+.controls-row {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.search-container {
+  flex: 1;
+  min-width: 200px;
+}
+
+.sort-container {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .action-buttons {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .actions-cell {
+    min-width: 120px;
+  }
+
+  .table-wrap th:last-child,
+  .table-wrap td:last-child {
+    width: 120px;
+    min-width: 120px;
+  }
+
+  .controls-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-container {
+    min-width: unset;
+  }
+}
+</style>
+
   <div class="row space-between align-center">
     <h2>{{ t('my_reports') }}</h2>
     <div class="row gap">
@@ -8,14 +86,14 @@
   </div>
 
   <!-- Search and Sort Controls -->
-  <div class="controls-row" style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 0.5rem;">
-    <div style="flex: 1;">
+  <div class="controls-row">
+    <div class="search-container">
       <label for="searchInput" style="font-weight: 500; margin-bottom: 0.25rem; display: block;">{{ t('search') }}</label>
       <input type="text" id="searchInput" placeholder="{{ t('search_placeholder') }}" value="{{ current_search if current_search else '' }}"
              style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 0.25rem;"
              onkeyup="performSearch()">
     </div>
-    <div style="display: flex; gap: 0.5rem; align-items: center;">
+    <div class="sort-container">
       <label for="sortSelect" style="font-weight: 500;">{{ t('sort_by') }}</label>
       <select id="sortSelect" onchange="updateSort()" style="padding: 0.5rem; border: 1px solid #ddd; border-radius: 0.25rem;">
         <option value="date" {{ 'selected' if current_sort == 'date' else '' }}>{{ t('date') }}</option>
@@ -43,7 +121,7 @@
           <th>{{ t('classification') }}</th>
           <th>{{ t('order_value_eur') }}</th>
           <th>{{ t('offer_value_eur') }}</th>
-          <th>{{ t('actions') }}</th>
+          <th class="actions-cell">{{ t('actions') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -57,9 +135,11 @@
           <td>{{ r.classification }}</td>
           <td>{{ '%.2f'|format(r.order_value_eur) }}</td>
           <td>{{ '%.2f'|format(r.offer_value_eur) }}</td>
-          <td>
-            <a class="btn small" href="/reports/{{ r.id }}/edit">{{ t('edit') }}</a>
-            <a class="btn small" href="/reports/{{ r.id }}/pdf" style="margin-left: 0.5rem;">PDF</a>
+          <td class="actions-cell">
+            <div class="action-buttons">
+              <a class="btn small" href="/reports/{{ r.id }}/edit">{{ t('edit') }}</a>
+              <a class="btn small" href="/reports/{{ r.id }}/pdf">PDF</a>
+            </div>
           </td>
         </tr>
         {% endfor %}
