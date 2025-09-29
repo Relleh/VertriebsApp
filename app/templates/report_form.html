@@ -161,7 +161,7 @@
           </select>
         </label>
 
-        <label>
+        <label style="flex: 1;">
           {{ t('customer_active') }}
           <select required name="customer_active">
             <option value="">{{ t('please_select') }}</option>
@@ -169,18 +169,18 @@
             <option value="no" {% if report and not report.customer_active %}selected{% endif %}>{{ t('no') }}</option>
           </select>
         </label>
+
+        <label style="flex: 1;">
+          {{ t('day_status') }}
+          <select required name="day_status_ui">
+            <option value="MOBILE" {% if not report or report.day_status=='MOBILE' %}selected{% endif %}>{{ t('mobile') }}</option>
+            <option value="OFFICE" {% if report and report.day_status=='OFFICE' %}selected{% endif %}>{{ t('office') }}</option>
+            <option value="PREVENTED" {% if report and report.day_status=='PREVENTED' %}selected{% endif %}>{{ t('prevented') }}</option>
+            <option value="FAIR" {% if report and report.day_status=='FAIR' %}selected{% endif %}>{{ t('fair') }}</option>
+            <option value="SETUP" {% if report and report.day_status=='SETUP' %}selected{% endif %}>{{ t('setup') }}</option>
+          </select>
+        </label>
       </div>
-      
-      <label>
-        {{ t('day_status') }}
-        <select required name="day_status_ui">
-          <option value="MOBILE" {% if not report or report.day_status=='MOBILE' %}selected{% endif %}>{{ t('mobile') }}</option>
-          <option value="OFFICE" {% if report and report.day_status=='OFFICE' %}selected{% endif %}>{{ t('office') }}</option>
-          <option value="PREVENTED" {% if report and report.day_status=='PREVENTED' %}selected{% endif %}>{{ t('prevented') }}</option>
-          <option value="FAIR" {% if report and report.day_status=='FAIR' %}selected{% endif %}>{{ t('fair') }}</option>
-          <option value="SETUP" {% if report and report.day_status=='SETUP' %}selected{% endif %}>{{ t('setup') }}</option>
-        </select>
-      </label>
     </div>
 
     <div class="row gap">
