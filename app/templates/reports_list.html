@@ -57,7 +57,10 @@
           <td>{{ r.classification }}</td>
           <td>{{ '%.2f'|format(r.order_value_eur) }}</td>
           <td>{{ '%.2f'|format(r.offer_value_eur) }}</td>
-          <td><a class="btn small" href="/reports/{{ r.id }}/edit">{{ t('edit') }}</a></td>
+          <td>
+            <a class="btn small" href="/reports/{{ r.id }}/edit">{{ t('edit') }}</a>
+            <a class="btn small" href="/reports/{{ r.id }}/pdf" style="margin-left: 0.5rem;">PDF</a>
+          </td>
         </tr>
         {% endfor %}
       </tbody>

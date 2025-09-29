@@ -1,10 +1,17 @@
 import os
 from datetime import date
 from typing import Optional
+from io import BytesIO
+
+from reportlab.lib.pagesizes import A4
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
+from reportlab.lib import colors
 
 from fastapi import FastAPI, Request, Depends, Form, HTTPException, Query
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import RedirectResponse, JSONResponse, Response
+from fastapi.responses import RedirectResponse, JSONResponse, Response, StreamingResponse
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 from sqlalchemy.orm import Session
@@ -493,4 +500,160 @@ def get_customer_abc_data(customer_no: str, db: Session = Depends(get_db)):
             'is_default_classification': customer_data['is_default_classification']
         }
     return {'abc_classification': 'C', 'is_new_customer': False, 'is_default_classification': True}
+
+def generate_report_pdf(report, locale='de'):
+    """Generate a PDF for a report"""
+    buffer = BytesIO()
+
+    # Create the PDF document
+    doc = SimpleDocTemplate(buffer, pagesize=A4,
+                          leftMargin=0.75*inch, rightMargin=0.75*inch,
+                          topMargin=1*inch, bottomMargin=1*inch)
+
+    # Get styles
+    styles = getSampleStyleSheet()
+    title_style = ParagraphStyle(
+        'CustomTitle',
+        parent=styles['Heading1'],
+        fontSize=18,
+        textColor=colors.darkblue,
+        spaceAfter=20,
+        alignment=1  # Center alignment
+    )
+
+    heading_style = ParagraphStyle(
+        'CustomHeading',
+        parent=styles['Heading2'],
+        fontSize=14,
+        textColor=colors.darkblue,
+        spaceBefore=15,
+        spaceAfter=10
+    )
+
+    content = []
+
+    # Title
+    content.append(Paragraph("Vertriebsbericht", title_style))
+    content.append(Spacer(1, 20))
+
+    # Grunddaten Table
+    grunddaten_data = [
+        ['Datum:', str(report.date)],
+        ['Kundennummer:', report.customer_no],
+        ['Kundenname:', report.customer_name],
+        ['Ansprechpartner:', report.contact_person],
+        ['Ort:', report.place],
+        ['Klassifikation:', report.classification],
+        ['Tagesstatus:', report.day_status],
+        ['Neukunde:', 'Ja' if report.is_new_account else 'Nein'],
+        ['Übernachtung:', 'Ja' if report.overnight else 'Nein']
+    ]
+
+    content.append(Paragraph("Grunddaten", heading_style))
+    grunddaten_table = Table(grunddaten_data, colWidths=[2*inch, 4*inch])
+    grunddaten_table.setStyle(TableStyle([
+        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+        ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
+        ('FONTNAME', (1, 0), (1, -1), 'Helvetica'),
+        ('FONTSIZE', (0, 0), (-1, -1), 10),
+        ('ROWBACKGROUNDS', (0, 0), (-1, -1), [colors.lightgrey, colors.white]),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black)
+    ]))
+    content.append(grunddaten_table)
+    content.append(Spacer(1, 20))
+
+    # Werte Table
+    content.append(Paragraph("Werte", heading_style))
+    werte_data = [
+        ['Auftragswert (EUR):', f"{float(report.order_value_eur):.2f}" if report.order_value_eur else "0.00"],
+        ['Angebotswert (EUR):', f"{float(report.offer_value_eur):.2f}" if report.offer_value_eur else "0.00"],
+        ['Nächster Besuch (Wochen):', str(report.next_visit_weeks)]
+    ]
+
+    if report.offer_submitted is not None:
+        werte_data.append(['Angebot abgegeben:', 'Ja' if report.offer_submitted else 'Nein'])
+    if report.offer_amount_eur:
+        werte_data.append(['Angebotsbetrag (EUR):', f"{float(report.offer_amount_eur):.2f}"])
+
+    werte_table = Table(werte_data, colWidths=[2*inch, 4*inch])
+    werte_table.setStyle(TableStyle([
+        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+        ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
+        ('FONTNAME', (1, 0), (1, -1), 'Helvetica'),
+        ('FONTSIZE', (0, 0), (-1, -1), 10),
+        ('ROWBACKGROUNDS', (0, 0), (-1, -1), [colors.lightgrey, colors.white]),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black)
+    ]))
+    content.append(werte_table)
+    content.append(Spacer(1, 20))
+
+    # Vorgestellte Produkte
+    if any([report.presented_new_products, report.presented_diamond,
+            report.presented_coated_abrasives, report.presented_cutting_discs,
+            report.presented_current_promotion]):
+        content.append(Paragraph("Vorgestellte Produkte", heading_style))
+        produkte_data = []
+        if report.presented_new_products: produkte_data.append(['Neue Produkte:', 'Ja'])
+        if report.presented_diamond: produkte_data.append(['Diamond Produkte:', 'Ja'])
+        if report.presented_coated_abrasives: produkte_data.append(['Coated Abrasives:', 'Ja'])
+        if report.presented_cutting_discs: produkte_data.append(['Cutting Discs:', 'Ja'])
+        if report.presented_current_promotion: produkte_data.append(['Aktuelle Promotion:', 'Ja'])
+
+        produkte_table = Table(produkte_data, colWidths=[2*inch, 4*inch])
+        produkte_table.setStyle(TableStyle([
+            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+            ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
+            ('FONTNAME', (1, 0), (1, -1), 'Helvetica'),
+            ('FONTSIZE', (0, 0), (-1, -1), 10),
+            ('ROWBACKGROUNDS', (0, 0), (-1, -1), [colors.lightgrey, colors.white]),
+            ('GRID', (0, 0), (-1, -1), 1, colors.black)
+        ]))
+        content.append(produkte_table)
+        content.append(Spacer(1, 20))
+
+    # Kurzbericht
+    content.append(Paragraph("Kurzbericht", heading_style))
+    content.append(Paragraph(report.short_report, styles['Normal']))
+    content.append(Spacer(1, 15))
+
+    # Nächste Schritte
+    content.append(Paragraph("Nächste Schritte", heading_style))
+    content.append(Paragraph(report.next_steps, styles['Normal']))
+    content.append(Spacer(1, 20))
+
+    # Erstellt von
+    content.append(Paragraph(f"Erstellt von: {report.owner_name or report.owner_email}", styles['Normal']))
+    content.append(Paragraph(f"Erstellt am: {report.created_at.strftime('%d.%m.%Y %H:%M') if report.created_at else 'Unbekannt'}", styles['Normal']))
+
+    # Build PDF
+    doc.build(content)
+    buffer.seek(0)
+    return buffer
+
+@app.get('/reports/{report_id}/pdf')
+def download_report_pdf(report_id: int, request: Request, db: Session = Depends(get_db)):
+    """Generate and download PDF for a report"""
+    user = get_current_user(request)
+    if not user:
+        return RedirectResponse('/login')
+
+    # Get the report
+    report = db.get(Report, report_id)
+    if not report or report.owner_oid != user.oid:
+        raise HTTPException(status_code=404, detail="Report not found")
+
+    locale = get_locale(request)
+
+    # Generate PDF
+    pdf_buffer = generate_report_pdf(report, locale)
+
+    # Create filename
+    filename = f"vertriebsbericht_{report.customer_no}_{report.date}.pdf"
+
+    # Return as streaming response for download
+    return StreamingResponse(
+        BytesIO(pdf_buffer.read()),
+        media_type="application/pdf",
+        headers={"Content-Disposition": f"attachment; filename={filename}"}
+    )
 
