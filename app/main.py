@@ -574,14 +574,14 @@ def generate_report_pdf(report, locale='de'):
     content.append(Paragraph(t('pdf_values', locale), heading_style))
     werte_data = [
         [t('pdf_order_value', locale), f"{float(report.order_value_eur):.2f}" if report.order_value_eur else "0.00"],
-        [t('pdf_offer_value', locale), f"{float(report.offer_value_eur):.2f}" if report.offer_value_eur else "0.00"],
         [t('pdf_next_visit', locale), str(report.next_visit_weeks)]
     ]
 
+    # Only show offer fields if an offer was actually submitted
     if report.offer_submitted is not None:
         werte_data.append([t('pdf_offer_submitted', locale), yes_no(report.offer_submitted)])
-    if report.offer_amount_eur:
-        werte_data.append([t('pdf_offer_amount', locale), f"{float(report.offer_amount_eur):.2f}"])
+        if report.offer_submitted and report.offer_amount_eur:
+            werte_data.append([t('pdf_offer_amount', locale), f"{float(report.offer_amount_eur):.2f}"])
 
     werte_table = Table(werte_data, colWidths=[2*inch, 4*inch])
     werte_table.setStyle(TableStyle([
