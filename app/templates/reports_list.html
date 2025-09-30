@@ -52,31 +52,121 @@
   flex-shrink: 0;
 }
 
-/* Mobile responsive adjustments */
+/* Mobile Card Layout */
 @media (max-width: 768px) {
-  .action-buttons {
-    flex-direction: column;
-    gap: 0.25rem;
+  /* Hide table on mobile */
+  .table-wrap table {
+    display: none;
   }
 
-  .actions-cell {
-    min-width: 120px;
-  }
-
-  .table-wrap th:last-child,
-  .table-wrap td:last-child {
-    width: 120px;
-    min-width: 120px;
+  /* Show card layout instead */
+  .mobile-cards {
+    display: block !important;
   }
 
   .controls-row {
     flex-direction: column;
     align-items: stretch;
+    padding: 0.75rem;
   }
 
   .search-container {
     min-width: unset;
   }
+
+  .sort-container {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+/* Desktop: hide mobile cards */
+@media (min-width: 769px) {
+  .mobile-cards {
+    display: none;
+  }
+}
+
+/* Mobile Card Styles */
+.mobile-cards {
+  display: none;
+}
+
+.report-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+}
+
+.report-card.expanded {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-color: var(--brand);
+}
+
+.report-card-header {
+  padding: 1rem;
+  cursor: pointer;
+  user-select: none;
+  background: #fafafa;
+  transition: background 0.2s ease;
+}
+
+.report-card.expanded .report-card-header {
+  background: var(--brand-2);
+}
+
+.report-card-header:active {
+  background: #f0f0f0;
+}
+
+.report-card-date {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+  font-weight: 500;
+}
+
+.report-card-customer {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--brand);
+  margin-bottom: 0.25rem;
+}
+
+.report-card-place {
+  font-size: 0.9rem;
+  color: var(--fg);
+}
+
+.report-card-actions {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  padding: 0 1rem;
+  background: white;
+}
+
+.report-card.expanded .report-card-actions {
+  max-height: 200px;
+  padding: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.report-card-actions .action-buttons {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: stretch;
+}
+
+.report-card-actions .btn {
+  flex: 1;
+  text-align: center;
+  padding: 0.75rem;
+  min-height: 44px;
 }
 </style>
 
@@ -111,6 +201,7 @@
   {% if not reports %}
     <p>{{ t('no_reports') }}</p>
   {% else %}
+  <!-- Desktop Table View -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -148,6 +239,25 @@
       </tbody>
     </table>
   </div>
+
+  <!-- Mobile Card View -->
+  <div class="mobile-cards">
+    {% for r in reports %}
+    <div class="report-card" data-report-id="{{ r.id }}">
+      <div class="report-card-header" onclick="toggleReportCard(this)">
+        <div class="report-card-date">{{ r.date }}</div>
+        <div class="report-card-customer">{{ r.customer_name }}</div>
+        <div class="report-card-place">📍 {{ r.place }}</div>
+      </div>
+      <div class="report-card-actions">
+        <div class="action-buttons">
+          <a class="btn" href="/reports/{{ r.id }}/edit">{{ t('edit') }}</a>
+          <a class="btn secondary" href="/reports/{{ r.id }}/pdf">PDF</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
   {% endif %}
 {% endblock %}
 
@@ -156,6 +266,21 @@
 <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.x/dist/index.umd.js"></script>
 
 <script>
+// Mobile Card Toggle functionality
+function toggleReportCard(headerElement) {
+  const card = headerElement.closest('.report-card');
+
+  // Close all other cards
+  document.querySelectorAll('.report-card.expanded').forEach(otherCard => {
+    if (otherCard !== card) {
+      otherCard.classList.remove('expanded');
+    }
+  });
+
+  // Toggle this card
+  card.classList.toggle('expanded');
+}
+
 // Search and Sort functionality
 let searchTimeout;
 
