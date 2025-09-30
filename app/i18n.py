@@ -53,7 +53,7 @@ DE = {
     'select_customer': 'Bitte wählen Sie den gewünschten Kunden:',
 
     # New Customer Selection
-    'new_customer_question': 'Neukunde?',
+    'new_customer_question': 'Potentialkunde?',
     'reset_selection': 'Auswahl zurücksetzen',
 
     # Search and Sort
@@ -149,7 +149,7 @@ EN = {
     'select_customer': 'Please select the desired customer:',
 
     # New Customer Selection
-    'new_customer_question': 'New Customer?',
+    'new_customer_question': 'Potential Customer?',
     'reset_selection': 'Reset selection',
 
     # Search and Sort
