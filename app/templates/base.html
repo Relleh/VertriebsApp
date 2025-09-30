@@ -34,7 +34,7 @@
         </nav>
       </div>
     </header>
-    <main class="container">
+    <main class="{% block container_class %}container{% endblock %}">
       {% block content %}{% endblock %}
     </main>
     <script>
