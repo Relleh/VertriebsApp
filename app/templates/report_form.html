@@ -30,27 +30,50 @@
   <form method="post" action="{{ action }}" id="reportForm">
     <div class="form-section">
       <h3>{{ t('customer_data') }}</h3>
-      <div class="grid two">
+
+      <!-- Hidden input for is_new_account -->
+      <input type="hidden" name="is_new_account" id="is_new_account_hidden" value="">
+
+      <!-- Neukunde Selection -->
+      <div class="new-customer-selection" style="margin-bottom: 1.5rem;">
+        <div style="margin-bottom: 0.5rem; font-weight: 500;">
+          {{ t('new_customer_question') }}
+        </div>
+        <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+          <button type="button" class="btn" id="new_customer_yes_btn" onclick="selectNewCustomer(true)" style="min-width: 80px;">
+            {{ t('yes') }}
+          </button>
+          <button type="button" class="btn secondary" id="new_customer_no_btn" onclick="selectNewCustomer(false)" style="min-width: 80px;">
+            {{ t('no') }}
+          </button>
+          <button type="button" class="btn secondary" id="reset_customer_selection_btn" onclick="resetCustomerSelection()" style="display: none; min-width: 120px;">
+            {{ t('reset_selection') }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Customer Data Fields (initially hidden) -->
+      <div id="customer_data_fields" class="grid two" style="display: none;">
         <label>
           {{ t('customer_no') }}
           <div class="autocomplete-container">
-            <input required name="customer_no" id="customer_no" value="{{ form_data.customer_no if form_data else (report.customer_no if report else '') }}" autocomplete="off">
+            <input name="customer_no" id="customer_no" value="{{ form_data.customer_no if form_data else (report.customer_no if report else '') }}" autocomplete="off">
           </div>
         </label>
         <label>
           {{ t('customer_name') }}
           <div class="autocomplete-container">
-            <input required name="customer_name" id="customer_name" value="{{ report.customer_name if report else '' }}" autocomplete="off">
+            <input name="customer_name" id="customer_name" value="{{ report.customer_name if report else '' }}" autocomplete="off">
           </div>
         </label>
         <label>
           {{ t('contact_person') }}
-          <input required name="contact_person" id="contact_person" value="{{ report.contact_person if report else '' }}">
+          <input name="contact_person" id="contact_person" value="{{ report.contact_person if report else '' }}">
         </label>
         <label>
           {{ t('place') }}
           <div class="autocomplete-container">
-            <input required name="place" id="place" value="{{ report.place if report else '' }}" autocomplete="off">
+            <input name="place" id="place" value="{{ report.place if report else '' }}" autocomplete="off">
           </div>
         </label>
       </div>
@@ -142,16 +165,7 @@
           {{ t('next_visit_weeks') }}
           <input required type="number" min="0" max="520" name="next_visit_weeks" value="{{ report.next_visit_weeks if report else '' }}">
         </label>
-        
-        <label>
-          {{ t('is_new_account') }}
-          <select required name="is_new_account" id="is_new_account">
-            <option value="">{{ t('please_select') }}</option>
-            <option value="yes" {% if report and report.is_new_account %}selected{% endif %}>{{ t('yes') }}</option>
-            <option value="no" {% if report and not report.is_new_account %}selected{% endif %}>{{ t('no') }}</option>
-          </select>
-        </label>
-        
+
         <label>
           {{ t('overnight') }}
           <select required name="overnight">
@@ -887,7 +901,194 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial check beim Laden der Seite (für Edit-Modus)
     handleOfferSubmittedChange();
   }
+
+  // ===== NEUKUNDE FUNKTIONALITÄT =====
+  // Initialize on page load for edit mode
+  initializeNewCustomerState();
 });
+
+// Neukunde selection functions (defined globally for inline onclick handlers)
+function selectNewCustomer(isNew) {
+  const customerDataFields = document.getElementById('customer_data_fields');
+  const customerNoInput = document.getElementById('customer_no');
+  const hiddenInput = document.getElementById('is_new_account_hidden');
+  const resetBtn = document.getElementById('reset_customer_selection_btn');
+  const yesBtn = document.getElementById('new_customer_yes_btn');
+  const noBtn = document.getElementById('new_customer_no_btn');
+
+  if (!customerDataFields || !customerNoInput || !hiddenInput) {
+    console.error('Required elements not found for new customer selection');
+    return;
+  }
+
+  // Show customer data fields
+  customerDataFields.style.display = 'grid';
+
+  // Make fields required when visible
+  customerNoInput.required = true;
+  document.getElementById('customer_name').required = true;
+  document.getElementById('contact_person').required = true;
+  document.getElementById('place').required = true;
+
+  // Update button styles
+  if (isNew) {
+    yesBtn.classList.remove('secondary');
+    yesBtn.classList.add('primary');
+    noBtn.classList.remove('primary');
+    noBtn.classList.add('secondary');
+  } else {
+    noBtn.classList.remove('secondary');
+    noBtn.classList.add('primary');
+    yesBtn.classList.remove('primary');
+    yesBtn.classList.add('secondary');
+  }
+
+  // Show reset button
+  resetBtn.style.display = 'inline-block';
+
+  if (isNew) {
+    // Neukunde = JA: Set customer_no to 199999 and make readonly
+    customerNoInput.value = '199999';
+    customerNoInput.readOnly = true;
+    customerNoInput.style.backgroundColor = '#f5f5f5';
+    customerNoInput.style.cursor = 'not-allowed';
+    hiddenInput.value = 'yes';
+
+    // Reset field state to prevent autofill conflicts
+    if (typeof resetFieldState !== 'undefined') {
+      resetFieldState('customer_no');
+    }
+  } else {
+    // Neukunde = NEIN: Make customer_no editable and clear if it was 199999
+    customerNoInput.readOnly = false;
+    customerNoInput.style.backgroundColor = '';
+    customerNoInput.style.cursor = '';
+    hiddenInput.value = 'no';
+
+    // Clear customer_no only if it was the new customer number
+    if (customerNoInput.value === '199999') {
+      customerNoInput.value = '';
+    }
+
+    // Reset field state to allow autofill
+    if (typeof resetFieldState !== 'undefined') {
+      resetFieldState('customer_no');
+    }
+  }
+}
+
+function resetCustomerSelection() {
+  const customerDataFields = document.getElementById('customer_data_fields');
+  const customerNoInput = document.getElementById('customer_no');
+  const customerNameInput = document.getElementById('customer_name');
+  const contactPersonInput = document.getElementById('contact_person');
+  const placeInput = document.getElementById('place');
+  const hiddenInput = document.getElementById('is_new_account_hidden');
+  const resetBtn = document.getElementById('reset_customer_selection_btn');
+  const yesBtn = document.getElementById('new_customer_yes_btn');
+  const noBtn = document.getElementById('new_customer_no_btn');
+
+  if (!customerDataFields || !hiddenInput) {
+    console.error('Required elements not found for reset');
+    return;
+  }
+
+  // Hide customer data fields
+  customerDataFields.style.display = 'none';
+
+  // Remove required attribute when hidden
+  if (customerNoInput) customerNoInput.required = false;
+  if (customerNameInput) customerNameInput.required = false;
+  if (contactPersonInput) contactPersonInput.required = false;
+  if (placeInput) placeInput.required = false;
+
+  // Reset all input fields
+  if (customerNoInput) {
+    customerNoInput.value = '';
+    customerNoInput.readOnly = false;
+    customerNoInput.style.backgroundColor = '';
+    customerNoInput.style.cursor = '';
+  }
+  if (customerNameInput) customerNameInput.value = '';
+  if (contactPersonInput) contactPersonInput.value = '';
+  if (placeInput) placeInput.value = '';
+
+  // Reset hidden input
+  hiddenInput.value = '';
+
+  // Hide reset button
+  resetBtn.style.display = 'none';
+
+  // Reset button styles
+  yesBtn.classList.remove('primary');
+  yesBtn.classList.add('secondary');
+  noBtn.classList.remove('primary');
+  noBtn.classList.add('secondary');
+
+  // Reset all field states
+  if (typeof resetFieldState !== 'undefined') {
+    ['customer_no', 'customer_name', 'contact_person', 'place'].forEach(field => {
+      resetFieldState(field);
+    });
+  }
+}
+
+function initializeNewCustomerState() {
+  // Check if we're in edit mode (report exists)
+  const customerNoInput = document.getElementById('customer_no');
+  const hiddenInput = document.getElementById('is_new_account_hidden');
+
+  if (!customerNoInput || !hiddenInput) return;
+
+  // If customer_no has a value, show fields
+  if (customerNoInput.value && customerNoInput.value.trim() !== '') {
+    const customerDataFields = document.getElementById('customer_data_fields');
+    const resetBtn = document.getElementById('reset_customer_selection_btn');
+
+    if (customerDataFields) {
+      customerDataFields.style.display = 'grid';
+      resetBtn.style.display = 'inline-block';
+
+      // Make fields required when visible
+      customerNoInput.required = true;
+      const customerNameInput = document.getElementById('customer_name');
+      const contactPersonInput = document.getElementById('contact_person');
+      const placeInput = document.getElementById('place');
+      if (customerNameInput) customerNameInput.required = true;
+      if (contactPersonInput) contactPersonInput.required = true;
+      if (placeInput) placeInput.required = true;
+    }
+
+    // Determine if it's a new customer based on customer_no being 199999
+    if (customerNoInput.value === '199999') {
+      // New customer
+      hiddenInput.value = 'yes';
+      const yesBtn = document.getElementById('new_customer_yes_btn');
+      const noBtn = document.getElementById('new_customer_no_btn');
+
+      if (yesBtn && noBtn) {
+        yesBtn.classList.remove('secondary');
+        yesBtn.classList.add('primary');
+        noBtn.classList.add('secondary');
+      }
+
+      customerNoInput.readOnly = true;
+      customerNoInput.style.backgroundColor = '#f5f5f5';
+      customerNoInput.style.cursor = 'not-allowed';
+    } else {
+      // Existing customer
+      hiddenInput.value = 'no';
+      const yesBtn = document.getElementById('new_customer_yes_btn');
+      const noBtn = document.getElementById('new_customer_no_btn');
+
+      if (yesBtn && noBtn) {
+        noBtn.classList.remove('secondary');
+        noBtn.classList.add('primary');
+        yesBtn.classList.add('secondary');
+      }
+    }
+  }
+}
 
 // Backup initialization on window load
 window.addEventListener('load', () => {

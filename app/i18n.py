@@ -52,6 +52,10 @@ DE = {
     'multiple_matches_found': 'Mehrere Treffer gefunden',
     'select_customer': 'Bitte wählen Sie den gewünschten Kunden:',
 
+    # New Customer Selection
+    'new_customer_question': 'Neukunde?',
+    'reset_selection': 'Auswahl zurücksetzen',
+
     # Search and Sort
     'search': 'Suchen:',
     'search_placeholder': 'Berichte durchsuchen...',
@@ -143,6 +147,10 @@ EN = {
     # Multi-Match Modal
     'multiple_matches_found': 'Multiple Matches Found',
     'select_customer': 'Please select the desired customer:',
+
+    # New Customer Selection
+    'new_customer_question': 'New Customer?',
+    'reset_selection': 'Reset selection',
 
     # Search and Sort
     'search': 'Search:',
