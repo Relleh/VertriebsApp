@@ -129,6 +129,8 @@ def list_reports(request: Request, db: Session = Depends(get_db), sort: str = Qu
             (Report.place.ilike(search_term)) |
             (Report.short_report.ilike(search_term)) |
             (Report.next_steps.ilike(search_term)) |
+            (Report.next_steps_field.ilike(search_term)) |
+            (Report.next_steps_office.ilike(search_term)) |
             (Report.classification.ilike(search_term))
         )
     
@@ -190,7 +192,9 @@ def create_report(
     place: str = Form(...),            # Pflicht-Flag hier ändern -> Form(None)
     date_val: str = Form(...),         # Pflicht-Flag hier ändern -> Form(None)
     short_report: str = Form(...),     # Pflicht-Flag hier ändern -> Form(None)
-    next_steps: str = Form(...),       # Pflicht-Flag hier ändern -> Form(None)
+    next_steps: Optional[str] = Form(None),  # Legacy field - optional
+    next_steps_field: Optional[str] = Form(None),  # To-dos Außendienst
+    next_steps_office: Optional[str] = Form(None), # To-dos Innendienst
     classification: str = Form(...),   # Pflicht-Flag hier ändern -> Form(None)
     order_value_eur: float = Form(0.0),
     offer_value_eur: float = Form(0.0),
@@ -233,8 +237,6 @@ def create_report(
     # Basic validation - just check not empty after strip
     if not short_report.strip():
         errors.append('Kurzbericht darf nicht leer sein')
-    if not next_steps.strip():
-        errors.append('Nächste Schritte dürfen nicht leer sein')
 
     # Angebot validation - if offer submitted = yes, amount is required
     if offer_submitted == 'yes':
@@ -285,7 +287,9 @@ def create_report(
         place=place.strip(),
         date=report_date,
         short_report=short_report.strip(),
-        next_steps=next_steps.strip(),
+        next_steps=next_steps.strip() if next_steps else None,
+        next_steps_field=next_steps_field.strip() if next_steps_field else None,
+        next_steps_office=next_steps_office.strip() if next_steps_office else None,
         classification=classification,
         order_value_eur=order_value_eur,
         offer_value_eur=offer_value_eur,
@@ -342,7 +346,9 @@ def update_report(
     place: str = Form(...),            # Pflicht-Flag hier ändern -> Form(None)
     date_val: str = Form(...),         # Pflicht-Flag hier ändern -> Form(None)
     short_report: str = Form(...),     # Pflicht-Flag hier ändern -> Form(None)
-    next_steps: str = Form(...),       # Pflicht-Flag hier ändern -> Form(None)
+    next_steps: Optional[str] = Form(None),  # Legacy field - optional
+    next_steps_field: Optional[str] = Form(None),  # To-dos Außendienst
+    next_steps_office: Optional[str] = Form(None), # To-dos Innendienst
     classification: str = Form(...),   # Pflicht-Flag hier ändern -> Form(None)
     order_value_eur: float = Form(0.0),
     offer_value_eur: float = Form(0.0),
@@ -386,8 +392,6 @@ def update_report(
     # Basic validation - just check not empty after strip
     if not short_report.strip():
         errors.append('Kurzbericht darf nicht leer sein')
-    if not next_steps.strip():
-        errors.append('Nächste Schritte dürfen nicht leer sein')
 
     # Angebot validation - if offer submitted = yes, amount is required
     if offer_submitted == 'yes':
@@ -413,7 +417,9 @@ def update_report(
     r.place = place.strip()
     r.date = report_date
     r.short_report = short_report.strip()
-    r.next_steps = next_steps.strip()
+    r.next_steps = next_steps.strip() if next_steps else None
+    r.next_steps_field = next_steps_field.strip() if next_steps_field else None
+    r.next_steps_office = next_steps_office.strip() if next_steps_office else None
     r.classification = classification
     r.order_value_eur = order_value_eur
     r.offer_value_eur = offer_value_eur
@@ -624,9 +630,20 @@ def generate_report_pdf(report, locale='de'):
     content.append(Paragraph(report.short_report, styles['Normal']))
     content.append(Spacer(1, 15))
 
-    # Next Steps
-    content.append(Paragraph(t('pdf_next_steps', locale), heading_style))
-    content.append(Paragraph(report.next_steps, styles['Normal']))
+    # Next Steps - Field Service
+    next_steps_field_title = 'To-dos/Nächste Schritte Außendienst' if locale == 'de' else 'To-dos/Next steps field service'
+    content.append(Paragraph(next_steps_field_title, heading_style))
+    next_steps_field_text = report.next_steps_field if report.next_steps_field else (report.next_steps if report.next_steps else '')
+    if next_steps_field_text:
+        content.append(Paragraph(next_steps_field_text, styles['Normal']))
+    content.append(Spacer(1, 15))
+
+    # Next Steps - Office
+    next_steps_office_title = 'To-dos/Nächste Schritte Innendienst' if locale == 'de' else 'To-dos/Next steps office'
+    content.append(Paragraph(next_steps_office_title, heading_style))
+    next_steps_office_text = report.next_steps_office if report.next_steps_office else ''
+    if next_steps_office_text:
+        content.append(Paragraph(next_steps_office_text, styles['Normal']))
     content.append(Spacer(1, 20))
 
     # Created by

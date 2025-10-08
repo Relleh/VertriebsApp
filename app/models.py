@@ -15,7 +15,9 @@ class Report(Base):
 
     date = Column(Date, nullable=False)
     short_report = Column(Text, nullable=False)
-    next_steps = Column(Text, nullable=False)
+    next_steps = Column(Text, nullable=True)  # Legacy field - kept for compatibility
+    next_steps_field = Column(Text, nullable=True)  # To-dos/Nächste Schritte Außendienst
+    next_steps_office = Column(Text, nullable=True)  # To-dos/Nächste Schritte Innendienst
 
     classification = Column(String, nullable=False)  # allowed: 'A','B','C'
     order_value_eur = Column(Numeric(12, 2), nullable=True, default=0)

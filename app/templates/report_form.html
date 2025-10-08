@@ -152,8 +152,12 @@
           <textarea required name="short_report" rows="3" minlength="1" title="{{ 'Mindestens ein Buchstabe erforderlich' if locale=='de' else 'At least one letter required' }}">{{ report.short_report if report else '' }}</textarea>
         </label>
         <label>
-          {{ t('next_steps') }}
-          <textarea required name="next_steps" rows="3" minlength="1" title="{{ 'Mindestens ein Buchstabe erforderlich' if locale=='de' else 'At least one letter required' }}">{{ report.next_steps if report else '' }}</textarea>
+          {{ 'To-dos/Nächste Schritte Außendienst' if locale=='de' else 'To-dos/Next steps field service' }}
+          <textarea name="next_steps_field" rows="3">{{ report.next_steps_field if report and report.next_steps_field else (report.next_steps if report and report.next_steps else '') }}</textarea>
+        </label>
+        <label>
+          {{ 'To-dos/Nächste Schritte Innendienst' if locale=='de' else 'To-dos/Next steps office' }}
+          <textarea name="next_steps_office" rows="3">{{ report.next_steps_office if report else '' }}</textarea>
         </label>
       </div>
     </div>
@@ -632,35 +636,28 @@ function setupEventListeners() {
 function validateForm(event) {
   const form = document.getElementById('reportForm');
   const shortReport = form.querySelector('[name="short_report"]').value;
-  const nextSteps = form.querySelector('[name="next_steps"]').value;
-  
+
   // Check for whitespace-only values
   if (!shortReport.trim()) {
     alert('Kurzbericht darf nicht leer sein');
     event.preventDefault();
     return false;
   }
-  
-  if (!nextSteps.trim()) {
-    alert('Nächste Schritte dürfen nicht leer sein');
-    event.preventDefault();
-    return false;
-  }
-  
+
   // Date validation
   const dateInput = form.querySelector('[name="date_val"]');
   if (dateInput.value) {
     const selectedDate = new Date(dateInput.value);
     const today = new Date();
     today.setHours(23, 59, 59, 999); // End of today
-    
+
     if (selectedDate > today) {
       alert('Datum darf nicht in der Zukunft liegen');
       event.preventDefault();
       return false;
     }
   }
-  
+
   return true;
 }
 
