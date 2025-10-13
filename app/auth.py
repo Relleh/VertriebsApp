@@ -29,6 +29,27 @@ class User:
     email: str | None = None
     tid: str | None = None
 
+def clean_owner_name(name: str | None) -> str | None:
+    """
+    Bereinigt Azure AD Namen von 'Nachname Vorname - Heller Tools GmbH'
+    zu 'Vorname Nachname'
+    """
+    if not name:
+        return name
+
+    # Entferne " - Heller Tools GmbH" oder ähnliche Zusätze
+    if ' - ' in name:
+        name = name.split(' - ')[0].strip()
+
+    # Versuche "Nachname Vorname" zu "Vorname Nachname" umzudrehen
+    # Nur wenn genau 2 Wörter vorhanden sind
+    parts = name.split()
+    if len(parts) == 2:
+        return f"{parts[1]} {parts[0]}"  # Vorname Nachname
+
+    # Bei mehr oder weniger als 2 Wörtern: so lassen
+    return name
+
 @router.get('/login')
 async def login(request: Request):
     print(f"[DEBUG] Login called, current session: {request.session}")
@@ -63,9 +84,12 @@ async def auth_callback(request: Request):
         id_token_str = token['id_token']
         print(f"[DEBUG] ID token string: {id_token_str[:50]}...")
         id_claims = jwt.decode(id_token_str, options={"verify_signature": False})
+        raw_name = id_claims.get('name')
+        cleaned_name = clean_owner_name(raw_name)
+        print(f"[DEBUG] Name cleaning: '{raw_name}' → '{cleaned_name}'")
         user = User(
             oid=id_claims.get('oid') or id_claims.get('sub'),
-            name=id_claims.get('name'),
+            name=cleaned_name,
             email=id_claims.get('preferred_username') or id_claims.get('email'),
             tid=id_claims.get('tid')
         )
