@@ -20,7 +20,7 @@ from .database import Base, engine, get_db
 from .models import Report
 from .schemas import ReportCreate, ReportUpdate
 from .i18n import t
-from .auth import router as auth_router, get_current_user, User
+from .auth import router as auth_router, get_current_user, User, clean_owner_name
 from .unified_customers import (
     load_unified_csv_into_db, search_customers, get_customer_number_suggestions,
     get_customer_name_suggestions, get_place_suggestions, find_matching_customers,
@@ -280,7 +280,7 @@ def create_report(
             }
         })
     r = Report(
-        owner_oid=user.oid, owner_email=user.email, owner_name=user.name,
+        owner_oid=user.oid, owner_email=user.email, owner_name=clean_owner_name(user.name),
         customer_no=customer_no.strip(),
         customer_name=customer_name.strip(),
         contact_person=contact_person.strip(),
