@@ -677,9 +677,10 @@ def download_report_pdf(report_id: int, request: Request, db: Session = Depends(
     # Generate PDF
     pdf_buffer = generate_report_pdf(report, locale)
 
-    # Create filename
-    file_prefix = "vertriebsbericht" if locale == 'de' else "sales_report"
-    filename = f"{file_prefix}_{report.customer_no}_{report.date}.pdf"
+    # Create filename: Kundennr_Kundenname_Datum.pdf
+    # Bereinige Kundenname für Dateinamen (ersetze Leerzeichen und Sonderzeichen)
+    safe_customer_name = report.customer_name.replace(' ', '_').replace('/', '-').replace('\\', '-')
+    filename = f"{report.customer_no}_{safe_customer_name}_{report.date}.pdf"
 
     # Return as streaming response for download
     return StreamingResponse(
